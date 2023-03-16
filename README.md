@@ -7,4 +7,4 @@ How to launch the project?
 ![Console commands](./my-project//assets/startProject.png)
 3. Choose option and app will launch on device:
 
-![Console commands](./my-project//assets/phone.png)
+![Console commands](./my-project//assets/phone-screen.png)
