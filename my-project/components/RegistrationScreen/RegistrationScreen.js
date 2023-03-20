@@ -12,7 +12,9 @@ import {
   Image
 } from "react-native";
 
+
 const RegistrationScreen = () => {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -96,6 +98,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1B4371',
     textAlign: 'center',
+
     },
 
   });
