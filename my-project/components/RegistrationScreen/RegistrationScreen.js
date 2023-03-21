@@ -22,7 +22,6 @@ const initialFormState = {
   password: "",
 };
 
-
 const RegistrationScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
@@ -36,69 +35,79 @@ const RegistrationScreen = () => {
 
   return (
     <TouchableWithoutFeedback onPress={handlerSubmit}>
-      <View style={styles.container}>
+      <View style={styles.mainContainer}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-          <View style={styles.formWrap}>
-            <Text style={styles.title}>Registration</Text>
-            <View style={styles.avatar}>
-              <Image
-                source={require("../../assets/image/addBtn.png")}
-                style={styles.addBtn}
-              />
-            </View>
-            <KeyboardAvoidingView
-              behavior={Platform.OS == "ios" ? "padding" : "height"}
-            >
-              
+          <KeyboardAvoidingView
+          style = {styles.container}
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
             <View
               style={{
-                ...styles.form,
-                paddingBottom: isShowKeyboard ? 80 : 0,
+                ...styles.formWrap,
+                width: Dimensions.get("window").width,
+                paddingBottom: isShowKeyboard ? 40 : 0,
               }}
-
             >
-              <TextInput
-                value={values.login}
-                onChangeText={(value) =>
-                  setValues((prevState) => ({ ...prevState, login: value }))
-                }
-                placeholder="Login"
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
-              />
-              <View style={{ marginBottom: 16, marginTop: 16 }}>
+              <Text style={styles.title}>Registration</Text>
+              <View style={styles.avatarWrap}>
+                <View style={styles.avatar}>
+                  <Image
+                    source={require("../../assets/image/addBtn.png")}
+                    style={styles.addBtn}
+                  />
+                </View>
+              </View>
+              <View>
                 <TextInput
-                  value={values.email}
+                  value={values.login}
                   onChangeText={(value) =>
-                    setValues((prevState) => ({ ...prevState, email: value }))
+                    setValues((prevState) => ({ ...prevState, login: value }))
                   }
-                  placeholder="Email"
+                  placeholder="Login"
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(true)}
                 />
-              </View>
+                <View style={{ marginBottom: 16, marginTop: 16 }}>
+                  <TextInput
+                    value={values.email}
+                    onChangeText={(value) =>
+                      setValues((prevState) => ({ ...prevState, email: value }))
+                    }
+                    placeholder="Email"
+                    style={styles.input}
+                    onFocus={() => setIsShowKeyboard(true)}
+                  />
+                </View>
 
-              <TextInput
-                value={values.password}
-                onChangeText={(value) =>
-                  setValues((prevState) => ({ ...prevState, password: value }))
-                }
-                placeholder="Password"
-                secureTextEntry={true}
-                style={styles.input}
-                onFocus={() => setIsShowKeyboard(true)}
-              />
-              {!isShowKeyboard ? (
-                <>
-              <TouchableOpacity style={styles.styleRegisterBtn}  onPress={handlerSubmit}>
-                <Text style={styles.btnText}>Register</Text>
-              </TouchableOpacity>
-              <Text style={styles.text}>Already have an account? Login</Text> 
-              </>
-              ): (null)}
+                <TextInput
+                  value={values.password}
+                  onChangeText={(value) =>
+                    setValues((prevState) => ({
+                      ...prevState,
+                      password: value,
+                    }))
+                  }
+                  placeholder="Password"
+                  secureTextEntry={true}
+                  style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
+                />
+                {!isShowKeyboard ? (
+                  <>
+                    <TouchableOpacity
+                      style={styles.registerBtn}
+                      onPress={handlerSubmit}
+                    >
+                      <Text style={styles.btnText}>Register</Text>
+                    </TouchableOpacity>
+                    <Text style={styles.text}>
+                      Already have an account? Login
+                    </Text>
+                  </>
+                ) : null}
               </View>
-            </KeyboardAvoidingView>
-          </View>
+            </View>
+          </KeyboardAvoidingView>
         </ImageBackground>
       </View>
     </TouchableWithoutFeedback>
@@ -106,36 +115,37 @@ const RegistrationScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+  },
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+    justifyContent: 'flex-end',
   },
   image: {
     flex: 1,
-    width: Dimensions.get('window').width,
-    height: Dimensions.get('window').height,
+    alignItems: 'center',
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
     justifyContent: "flex-end",
   },
   formWrap: {
-    position: "absolute",
-    bottom: 0,
-    alignItems: "center",
-    justifyContent: "center",
+    paddingTop: 92,
     backgroundColor: "#FFFFFF",
-    width: 400,
-    height: 549,
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
+    alignItems: 'center',
+  },
+  avatarWrap: {
+    position: "absolute",
+    left: 138,
+    top: -60,
   },
   avatar: {
-    position: "absolute",
     width: 120,
     height: 120,
     backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-    left: 138,
-    top: -60,
+    borderRadius: 16, 
   },
   addBtn: {
     position: "absolute",
@@ -149,9 +159,8 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     fontSize: 30,
     color: "#212121",
-    marginTop: 32,
-    marginBottom: 33,
-    fontFamily: 'Roboto-Regular',
+    marginBottom: 32,
+    fontFamily: "Roboto-Regular",
   },
   input: {
     width: 350,
@@ -162,7 +171,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
   },
-  styleRegisterBtn: {
+  registerBtn: {
     height: 51,
     justifyContent: "center",
     alignItems: "center",
@@ -175,14 +184,17 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     color: "#FFFFFF",
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
+   
   },
   text: {
     marginTop: 16,
+    marginBottom: 45,
     fontSize: 16,
     color: "#1B4371",
     textAlign: "center",
-    fontFamily: 'Roboto-Regular',
+    fontFamily: "Roboto-Regular",
+    
   },
 });
 
