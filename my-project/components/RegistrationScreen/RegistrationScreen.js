@@ -24,17 +24,21 @@ const initialFormState = {
 
 const RegistrationScreen = () => {
   const [values, setValues] = useState(initialFormState);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(true);
 
   const handlerSubmit = () => {
-    setIsShowKeyboard(false);
-    Keyboard.dismiss();
     console.log(values);
     setValues(initialFormState);
+    keyboardHide();
   };
 
+
+  const keyboardHide = () => {
+    setIsShowKeyboard(true);
+    Keyboard.dismiss();
+  };
   return (
-    <TouchableWithoutFeedback onPress={handlerSubmit}>
+    <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.mainContainer}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
           <KeyboardAvoidingView
@@ -45,7 +49,7 @@ const RegistrationScreen = () => {
               style={{
                 ...styles.formWrap,
                 width: Dimensions.get("window").width,
-                paddingBottom: isShowKeyboard ? 40 : 0,
+                paddingBottom: !isShowKeyboard ? 40 : 0,
               }}
             >
               <Text style={styles.title}>Registration</Text>
@@ -65,7 +69,7 @@ const RegistrationScreen = () => {
                   }
                   placeholder="Login"
                   style={styles.input}
-                  onFocus={() => setIsShowKeyboard(true)}
+                  onFocus={() => setIsShowKeyboard(false)}
                 />
                 <View style={{ marginBottom: 16, marginTop: 16 }}>
                   <TextInput
@@ -75,7 +79,7 @@ const RegistrationScreen = () => {
                     }
                     placeholder="Email"
                     style={styles.input}
-                    onFocus={() => setIsShowKeyboard(true)}
+                    onFocus={() => setIsShowKeyboard(false)}
                   />
                 </View>
 
@@ -90,9 +94,9 @@ const RegistrationScreen = () => {
                   placeholder="Password"
                   secureTextEntry={true}
                   style={styles.input}
-                  onFocus={() => setIsShowKeyboard(true)}
+                  onFocus={() => setIsShowKeyboard(false)}
                 />
-                {!isShowKeyboard ? (
+                {isShowKeyboard ? (
                   <>
                     <TouchableOpacity
                       style={styles.registerBtn}
