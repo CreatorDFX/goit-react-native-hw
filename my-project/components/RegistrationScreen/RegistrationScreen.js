@@ -11,21 +11,31 @@ import {
   Image,
   TouchableOpacity,
   ImageBackground,
+  Dimensions,
 } from "react-native";
 
 import image from "../../assets/image/bgImg.jpg";
 
-const RegistrationScreen = () => {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const initialFormState = {
+  login: "",
+  email: "",
+  password: "",
+};
 
-  const nameHandler = (text) => setName(text);
-  const emailHandler = (text) => setEmail(text);
-  const passwordHandler = (text) => setPassword(text);
+
+const RegistrationScreen = () => {
+  const [values, setValues] = useState(initialFormState);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+  const handlerSubmit = () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+    console.log(values);
+    setValues(initialFormState);
+  };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <TouchableWithoutFeedback onPress={handlerSubmit}>
       <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
           <View style={styles.formWrap}>
@@ -39,33 +49,54 @@ const RegistrationScreen = () => {
             <KeyboardAvoidingView
               behavior={Platform.OS == "ios" ? "padding" : "height"}
             >
+              
+            <View
+              style={{
+                ...styles.form,
+                paddingBottom: isShowKeyboard ? 80 : 0,
+              }}
+
+            >
               <TextInput
-                value={name}
-                onChangeText={nameHandler}
+                value={values.login}
+                onChangeText={(value) =>
+                  setValues((prevState) => ({ ...prevState, login: value }))
+                }
                 placeholder="Login"
                 style={styles.input}
+                onFocus={() => setIsShowKeyboard(true)}
               />
               <View style={{ marginBottom: 16, marginTop: 16 }}>
                 <TextInput
-                  value={email}
-                  onChangeText={emailHandler}
+                  value={values.email}
+                  onChangeText={(value) =>
+                    setValues((prevState) => ({ ...prevState, email: value }))
+                  }
                   placeholder="Email"
                   style={styles.input}
+                  onFocus={() => setIsShowKeyboard(true)}
                 />
               </View>
 
               <TextInput
-                value={password}
-                onChangeText={passwordHandler}
+                value={values.password}
+                onChangeText={(value) =>
+                  setValues((prevState) => ({ ...prevState, password: value }))
+                }
                 placeholder="Password"
                 secureTextEntry={true}
                 style={styles.input}
+                onFocus={() => setIsShowKeyboard(true)}
               />
-
-              <TouchableOpacity style={styles.styleRegisterBtn}>
+              {!isShowKeyboard ? (
+                <>
+              <TouchableOpacity style={styles.styleRegisterBtn}  onPress={handlerSubmit}>
                 <Text style={styles.btnText}>Register</Text>
               </TouchableOpacity>
-              <Text style={styles.text}>Already have an account? Login</Text>
+              <Text style={styles.text}>Already have an account? Login</Text> 
+              </>
+              ): (null)}
+              </View>
             </KeyboardAvoidingView>
           </View>
         </ImageBackground>
@@ -82,8 +113,9 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    width: 400,
-    height: 812,
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
+    justifyContent: "flex-end",
   },
   formWrap: {
     position: "absolute",
@@ -119,9 +151,7 @@ const styles = StyleSheet.create({
     color: "#212121",
     marginTop: 32,
     marginBottom: 33,
-  },
-  form: {
-    marginHorizontal: 16,
+    fontFamily: 'Roboto-Regular',
   },
   input: {
     width: 350,
@@ -145,12 +175,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontSize: 16,
     color: "#FFFFFF",
+    fontFamily: 'Roboto-Regular',
   },
   text: {
     marginTop: 16,
     fontSize: 16,
     color: "#1B4371",
     textAlign: "center",
+    fontFamily: 'Roboto-Regular',
   },
 });
 
