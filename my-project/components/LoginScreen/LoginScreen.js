@@ -8,23 +8,24 @@ import {
   Platform,
   Text,
   View,
-  Image,
   TouchableOpacity,
   ImageBackground,
   Dimensions,
+  Image,
 } from "react-native";
 
 import image from "../../assets/image/bgImg.jpg";
 
 const initialFormState = {
-  login: "",
   email: "",
   password: "",
+ 
 };
 
 const RegistrationScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(true);
+  const [hidePassword, setHidePassword] = useState(true);
 
   const handlerSubmit = () => {
     console.log(values);
@@ -37,12 +38,16 @@ const RegistrationScreen = () => {
     setIsShowKeyboard(true);
     Keyboard.dismiss();
   };
+
+  const handlerHidePassword = () => {
+   setHidePassword(!hidePassword)
+  };
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.mainContainer}>
-        <ImageBackground source={image} resizeMode="cover" style={styles.bgImage}>
+        <ImageBackground source={image} resizeMode="cover" style={styles.image}>
           <KeyboardAvoidingView
-          style = {styles.formContainer}
+          style = {styles.container}
             behavior={Platform.OS == "ios" ? "padding" : "height"}
           >
             <View
@@ -52,26 +57,9 @@ const RegistrationScreen = () => {
                 paddingBottom: !isShowKeyboard ? 40 : 0,
               }}
             >
-              <Text style={styles.formTitle}>Registration</Text>
-              <View style={styles.avatarWrap}>
-                <View style={styles.avatar}>
-                  <Image
-                    source={require("../../assets/image/addBtn.png")}
-                    style={styles.addBtn}
-                  />
-                </View>
-              </View>
+              <Text style={styles.formTitle}>Login</Text>
               <View>
-                <TextInput
-                  value={values.login}
-                  onChangeText={(value) =>
-                    setValues((prevState) => ({ ...prevState, login: value }))
-                  }
-                  placeholder="Login"
-                  style={styles.input}
-                  onFocus={() => setIsShowKeyboard(false)}
-                />
-                <View style={{ marginBottom: 16, marginTop: 16 }}>
+                <View style={{ marginBottom: 16}}>
                   <TextInput
                     value={values.email}
                     onChangeText={(value) =>
@@ -82,7 +70,7 @@ const RegistrationScreen = () => {
                     onFocus={() => setIsShowKeyboard(false)}
                   />
                 </View>
-
+                <View>
                 <TextInput
                   value={values.password}
                   onChangeText={(value) =>
@@ -92,20 +80,28 @@ const RegistrationScreen = () => {
                     }))
                   }
                   placeholder="Password"
-                  secureTextEntry={true}
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(false)}
-                />
+                  secureTextEntry={hidePassword}
+                /> 
+                <TouchableOpacity 
+                  style={styles.showPassword}
+                  onPress={handlerHidePassword}
+                >
+                 <Image style={styles.showPasswordIcon} source={hidePassword ? require("../../assets/image/show.png") : require("../../assets/image/unshow.png")}/>
+                </TouchableOpacity>
+                </View>
                 {isShowKeyboard ? (
                   <>
                     <TouchableOpacity
+                     activeOpacity={0.8}
                       style={styles.registerBtn}
                       onPress={handlerSubmit}
                     >
-                      <Text style={styles.btnText}>Register</Text>
+                      <Text style={styles.btnText}>Login</Text>
                     </TouchableOpacity>
                     <Text style={styles.text}>
-                      Already have an account? Login
+                    Don't have an account? Register
                     </Text>
                   </>
                 ) : null}
@@ -122,11 +118,11 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
   },
-  formContainer: {
+  container: {
     flex: 1,
     justifyContent: 'flex-end',
   },
-  bgImage: {
+  image: {
     flex: 1,
     alignItems: 'center',
     width: Dimensions.get("window").width,
@@ -134,7 +130,6 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
   },
   formWrap: {
-    paddingTop: 92,
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
@@ -164,6 +159,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     color: "#212121",
     marginBottom: 32,
+    marginTop: 32,
     fontFamily: "Roboto-Regular",
   },
   input: {
@@ -193,12 +189,22 @@ const styles = StyleSheet.create({
   },
   text: {
     marginTop: 16,
-    marginBottom: 45,
+    marginBottom: 111,
     fontSize: 16,
     color: "#1B4371",
     textAlign: "center",
     fontFamily: "Roboto-Regular",
     
+  },
+  showPassword: {
+    position: 'absolute',
+    top: 12,
+    right: 15,
+  },
+
+  showPasswordIcon: {
+    width: 30,
+    height: 30,
   },
 });
 

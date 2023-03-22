@@ -1,5 +1,6 @@
 import { View } from "react-native";
 import RegistrationScreen from "./components/RegistrationScreen/RegistrationScreen";
+import LoginScreen from './components/LoginScreen/LoginScreen'
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
@@ -23,7 +24,9 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <RegistrationScreen />
+      <LoginScreen/>
+      {/* <RegistrationScreen /> */}
+     
     </View>
   );
 }
