@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import {
   TextInput,
   StyleSheet,
@@ -15,7 +15,6 @@ import {
 } from "react-native";
 
 import image from "../../assets/image/bgImg.jpg";
-const screenDimensions = Dimensions.get("screen");
 
 const initialFormState = {
   email: "",
@@ -26,20 +25,7 @@ const LoginScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
-  const [dimensions, setDimensions] = useState({
-    screen: screenDimensions,
-  });
 
-
-  useEffect(() => {
-    const subscription = Dimensions.addEventListener(
-      "change",
-      ({ window, screen }) => {
-        setDimensions({ screen });
-      }
-    );
-    return () => subscription?.remove();
-  });
 
   const keyboardHide = () => {
     Keyboard.dismiss();
@@ -60,14 +46,15 @@ const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-
               <KeyboardAvoidingView
+                style = {styles.formContainer}
             behavior={Platform.OS == "ios" ? "marginBottom" : "height"}
           >
             <View
               style={{
                 ...styles.formWrap,
                 width: Dimensions.get("window").width,
+                marginBottom: isShowKeyboard ? -210 : 0,
               }}
             >  
             <Text style={styles.formTitle}>Login</Text>
@@ -119,23 +106,14 @@ const LoginScreen = () => {
                 </View>
                     <TouchableOpacity
                       activeOpacity={0.8}
-                      style={styles.registerBtn}
+                      style={styles.loginBtn}
                       onPress={handlerSubmit}
                     >
                       <Text style={styles.btnText}>Login</Text>
                     </TouchableOpacity>
-                    <View
-                  style={{
-                    ...styles.textWrap,
-                    marginBottom: isShowKeyboard
-                      ? -110
-                      : Math.floor(dimensions.screen.height / 6),
-                  }}
-                >
                   <Text style={styles.text}>
                     Don't have an account? Register
                   </Text>
-                </View>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -155,6 +133,12 @@ const styles = StyleSheet.create({
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
     justifyContent: "flex-end",
+  },
+  formContainer: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    width: Dimensions.get("window").width,
+    height: Dimensions.get("window").height,
   },
   formWrap: {
     backgroundColor: "#FFFFFF",
@@ -180,7 +164,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
   },
-  registerBtn: {
+  loginBtn: {
     height: 51,
     justifyContent: "center",
     alignItems: "center",
@@ -195,11 +179,10 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontFamily: "Roboto-Regular",
   },
-  textWrap: {
-     marginTop: 16,
-     alignItems: 'center',
-  },
   text: {
+    textAlign: 'center',
+    marginTop: 16,
+    marginBottom: 111,
     fontSize: 16,
     color: "#1B4371",
     fontFamily: "Roboto-Regular",

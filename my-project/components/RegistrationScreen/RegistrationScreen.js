@@ -213,7 +213,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#FFFFFF",
     fontFamily: "Roboto-Regular",
-   
   },
   text: {
     marginTop: 16,
