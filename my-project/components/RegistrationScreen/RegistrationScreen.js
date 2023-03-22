@@ -49,7 +49,7 @@ const RegistrationScreen = () => {
         <ImageBackground source={image} resizeMode="cover" style={styles.bgImage}>
           <KeyboardAvoidingView
           style = {styles.formContainer}
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            behavior={Platform.OS == "ios" ? "paddingBottom" : "height"}
           >
             <View
               style={{
@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   },
   avatarWrap: {
     position: "absolute",
-    left: 138,
+    left: 148,
     top: -60,
   },
   avatar: {
