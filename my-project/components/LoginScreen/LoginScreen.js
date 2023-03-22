@@ -19,10 +19,9 @@ import image from "../../assets/image/bgImg.jpg";
 const initialFormState = {
   email: "",
   password: "",
- 
 };
 
-const RegistrationScreen = () => {
+const LoginScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(true);
   const [hidePassword, setHidePassword] = useState(true);
@@ -33,21 +32,20 @@ const RegistrationScreen = () => {
     keyboardHide();
   };
 
-
   const keyboardHide = () => {
     setIsShowKeyboard(true);
     Keyboard.dismiss();
   };
 
   const handlerHidePassword = () => {
-   setHidePassword(!hidePassword)
+    setHidePassword(!hidePassword);
   };
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.mainContainer}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
           <KeyboardAvoidingView
-          style = {styles.container}
+            style={styles.container}
             behavior={Platform.OS == "ios" ? "padding" : "height"}
           >
             <View
@@ -59,7 +57,7 @@ const RegistrationScreen = () => {
             >
               <Text style={styles.formTitle}>Login</Text>
               <View>
-                <View style={{ marginBottom: 16}}>
+                <View style={{ marginBottom: 16 }}>
                   <TextInput
                     value={values.email}
                     onChangeText={(value) =>
@@ -71,37 +69,44 @@ const RegistrationScreen = () => {
                   />
                 </View>
                 <View>
-                <TextInput
-                  value={values.password}
-                  onChangeText={(value) =>
-                    setValues((prevState) => ({
-                      ...prevState,
-                      password: value,
-                    }))
-                  }
-                  placeholder="Password"
-                  style={styles.input}
-                  onFocus={() => setIsShowKeyboard(false)}
-                  secureTextEntry={hidePassword}
-                /> 
-                <TouchableOpacity 
-                  style={styles.showPassword}
-                  onPress={handlerHidePassword}
-                >
-                 <Image style={styles.showPasswordIcon} source={hidePassword ? require("../../assets/image/show.png") : require("../../assets/image/unshow.png")}/>
-                </TouchableOpacity>
+                  <TextInput
+                    value={values.password}
+                    onChangeText={(value) =>
+                      setValues((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
+                    placeholder="Password"
+                    style={styles.input}
+                    onFocus={() => setIsShowKeyboard(false)}
+                    secureTextEntry={hidePassword}
+                  />
+                  <TouchableOpacity
+                    style={styles.showPassword}
+                    onPress={handlerHidePassword}
+                  >
+                    <Image
+                      style={styles.showPasswordIcon}
+                      source={
+                        hidePassword
+                          ? require("../../assets/image/show.png")
+                          : require("../../assets/image/unshow.png")
+                      }
+                    />
+                  </TouchableOpacity>
                 </View>
                 {isShowKeyboard ? (
                   <>
                     <TouchableOpacity
-                     activeOpacity={0.8}
+                      activeOpacity={0.8}
                       style={styles.registerBtn}
                       onPress={handlerSubmit}
                     >
                       <Text style={styles.btnText}>Login</Text>
                     </TouchableOpacity>
                     <Text style={styles.text}>
-                    Don't have an account? Register
+                      Don't have an account? Register
                     </Text>
                   </>
                 ) : null}
@@ -120,11 +125,11 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   image: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
     justifyContent: "flex-end",
@@ -133,7 +138,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    alignItems: 'center',
+    alignItems: "center",
   },
   avatarWrap: {
     position: "absolute",
@@ -144,7 +149,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     backgroundColor: "#F6F6F6",
-    borderRadius: 16, 
+    borderRadius: 16,
   },
   addBtn: {
     position: "absolute",
@@ -185,7 +190,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#FFFFFF",
     fontFamily: "Roboto-Regular",
-   
   },
   text: {
     marginTop: 16,
@@ -194,10 +198,9 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     textAlign: "center",
     fontFamily: "Roboto-Regular",
-    
   },
   showPassword: {
-    position: 'absolute',
+    position: "absolute",
     top: 12,
     right: 15,
   },
@@ -208,4 +211,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegistrationScreen;
+export default LoginScreen;

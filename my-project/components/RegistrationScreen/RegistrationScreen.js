@@ -25,6 +25,7 @@ const initialFormState = {
 const RegistrationScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(true);
+  const [hidePassword, setHidePassword] = useState(true);
 
   const handlerSubmit = () => {
     console.log(values);
@@ -37,6 +38,11 @@ const RegistrationScreen = () => {
     setIsShowKeyboard(true);
     Keyboard.dismiss();
   };
+
+  const handlerHidePassword = () => {
+    setHidePassword(!hidePassword);
+  };
+
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.mainContainer}>
@@ -82,7 +88,7 @@ const RegistrationScreen = () => {
                     onFocus={() => setIsShowKeyboard(false)}
                   />
                 </View>
-
+                <View>
                 <TextInput
                   value={values.password}
                   onChangeText={(value) =>
@@ -92,10 +98,24 @@ const RegistrationScreen = () => {
                     }))
                   }
                   placeholder="Password"
-                  secureTextEntry={true}
+                  secureTextEntry={hidePassword}
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(false)}
                 />
+                <TouchableOpacity
+                    style={styles.showPassword}
+                    onPress={handlerHidePassword}
+                  >
+                    <Image
+                      style={styles.showPasswordIcon}
+                      source={
+                        hidePassword
+                          ? require("../../assets/image/show.png")
+                          : require("../../assets/image/unshow.png")
+                      }
+                    />
+                  </TouchableOpacity>
+                  </View>
                 {isShowKeyboard ? (
                   <>
                     <TouchableOpacity
@@ -198,7 +218,15 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     textAlign: "center",
     fontFamily: "Roboto-Regular",
-    
+  },
+  showPassword: {
+    position: "absolute",
+    top: 12,
+    right: 15,
+  },
+  showPasswordIcon: {
+    width: 30,
+    height: 30,
   },
 });
 
