@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TextInput,
   StyleSheet,
@@ -15,6 +15,7 @@ import {
 } from "react-native";
 
 import image from "../../assets/image/bgImg.jpg";
+const screenDimensions = Dimensions.get("screen");
 
 const initialFormState = {
   email: "",
@@ -23,39 +24,53 @@ const initialFormState = {
 
 const LoginScreen = () => {
   const [values, setValues] = useState(initialFormState);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(true);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
+  const [dimensions, setDimensions] = useState({
+    screen: screenDimensions,
+  });
+
+
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener(
+      "change",
+      ({ window, screen }) => {
+        setDimensions({ screen });
+      }
+    );
+    return () => subscription?.remove();
+  });
+
+  const keyboardHide = () => {
+    Keyboard.dismiss();
+    setIsShowKeyboard(false);
+  };
 
   const handlerSubmit = () => {
     console.log(values);
+    Keyboard.dismiss();
     setValues(initialFormState);
-    keyboardHide();
   };
 
-  const keyboardHide = () => {
-    setIsShowKeyboard(true);
-    Keyboard.dismiss();
-  };
 
   const handlerHidePassword = () => {
     setHidePassword(!hidePassword);
   };
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.mainContainer}>
+      <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-          <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+
+              <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "marginBottom" : "height"}
           >
             <View
               style={{
                 ...styles.formWrap,
                 width: Dimensions.get("window").width,
-                paddingBottom: !isShowKeyboard ? 40 : 0,
               }}
-            >
-              <Text style={styles.formTitle}>Login</Text>
+            >  
+            <Text style={styles.formTitle}>Login</Text>
               <View>
                 <View style={{ marginBottom: 16 }}>
                   <TextInput
@@ -65,7 +80,10 @@ const LoginScreen = () => {
                     }
                     placeholder="Email"
                     style={styles.input}
-                    onFocus={() => setIsShowKeyboard(false)}
+                    onFocus={() => setIsShowKeyboard(true)}
+                    onBlur={() => {
+                      setIsShowKeyboard(false);
+                    }}
                   />
                 </View>
                 <View>
@@ -79,7 +97,10 @@ const LoginScreen = () => {
                     }
                     placeholder="Password"
                     style={styles.input}
-                    onFocus={() => setIsShowKeyboard(false)}
+                    onFocus={() => setIsShowKeyboard(true)}
+                    onBlur={() => {
+                      setIsShowKeyboard(false);
+                    }}
                     secureTextEntry={hidePassword}
                   />
                   <TouchableOpacity
@@ -96,8 +117,6 @@ const LoginScreen = () => {
                     />
                   </TouchableOpacity>
                 </View>
-                {isShowKeyboard ? (
-                  <>
                     <TouchableOpacity
                       activeOpacity={0.8}
                       style={styles.registerBtn}
@@ -105,11 +124,18 @@ const LoginScreen = () => {
                     >
                       <Text style={styles.btnText}>Login</Text>
                     </TouchableOpacity>
-                    <Text style={styles.text}>
-                      Don't have an account? Register
-                    </Text>
-                  </>
-                ) : null}
+                    <View
+                  style={{
+                    ...styles.textWrap,
+                    marginBottom: isShowKeyboard
+                      ? -110
+                      : Math.floor(dimensions.screen.height / 6),
+                  }}
+                >
+                  <Text style={styles.text}>
+                    Don't have an account? Register
+                  </Text>
+                </View>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -120,12 +146,8 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
   container: {
     flex: 1,
-    justifyContent: "flex-end",
   },
   image: {
     flex: 1,
@@ -139,24 +161,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
     alignItems: "center",
-  },
-  avatarWrap: {
-    position: "absolute",
-    left: 138,
-    top: -60,
-  },
-  avatar: {
-    width: 120,
-    height: 120,
-    backgroundColor: "#F6F6F6",
-    borderRadius: 16,
-  },
-  addBtn: {
-    position: "absolute",
-    width: 25,
-    height: 25,
-    left: 106,
-    top: 84,
   },
   formTitle: {
     textAlign: "center",
@@ -191,12 +195,13 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontFamily: "Roboto-Regular",
   },
+  textWrap: {
+     marginTop: 16,
+     alignItems: 'center',
+  },
   text: {
-    marginTop: 16,
-    marginBottom: 111,
     fontSize: 16,
     color: "#1B4371",
-    textAlign: "center",
     fontFamily: "Roboto-Regular",
   },
   showPassword: {

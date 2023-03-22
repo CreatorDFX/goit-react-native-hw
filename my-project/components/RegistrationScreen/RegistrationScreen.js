@@ -24,19 +24,18 @@ const initialFormState = {
 
 const RegistrationScreen = () => {
   const [values, setValues] = useState(initialFormState);
-  const [isShowKeyboard, setIsShowKeyboard] = useState(true);
+  const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
+
+  const keyboardHide = () => {
+    Keyboard.dismiss();
+    setIsShowKeyboard(false);
+  };
 
   const handlerSubmit = () => {
     console.log(values);
-    setValues(initialFormState);
-    keyboardHide();
-  };
-
-
-  const keyboardHide = () => {
-    setIsShowKeyboard(true);
     Keyboard.dismiss();
+    setValues(initialFormState);
   };
 
   const handlerHidePassword = () => {
@@ -49,13 +48,13 @@ const RegistrationScreen = () => {
         <ImageBackground source={image} resizeMode="cover" style={styles.bgImage}>
           <KeyboardAvoidingView
           style = {styles.formContainer}
-            behavior={Platform.OS == "ios" ? "paddingBottom" : "height"}
+            behavior={Platform.OS == "ios" ? "marginBottom" : "height"}
           >
             <View
               style={{
                 ...styles.formWrap,
                 width: Dimensions.get("window").width,
-                paddingBottom: !isShowKeyboard ? 40 : 0,
+                marginBottom: isShowKeyboard ? -150 : 0,
               }}
             >
               <Text style={styles.formTitle}>Registration</Text>
@@ -75,7 +74,10 @@ const RegistrationScreen = () => {
                   }
                   placeholder="Login"
                   style={styles.input}
-                  onFocus={() => setIsShowKeyboard(false)}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  onBlur={() => {
+                    setIsShowKeyboard(false);
+                  }}
                 />
                 <View style={{ marginBottom: 16, marginTop: 16 }}>
                   <TextInput
@@ -85,7 +87,10 @@ const RegistrationScreen = () => {
                     }
                     placeholder="Email"
                     style={styles.input}
-                    onFocus={() => setIsShowKeyboard(false)}
+                    onFocus={() => setIsShowKeyboard(true)}
+                    onBlur={() => {
+                      setIsShowKeyboard(false);
+                    }}
                   />
                 </View>
                 <View>
@@ -100,7 +105,10 @@ const RegistrationScreen = () => {
                   placeholder="Password"
                   secureTextEntry={hidePassword}
                   style={styles.input}
-                  onFocus={() => setIsShowKeyboard(false)}
+                  onFocus={() => setIsShowKeyboard(true)}
+                  onBlur={() => {
+                    setIsShowKeyboard(false);
+                  }}
                 />
                 <TouchableOpacity
                     style={styles.showPassword}
@@ -116,8 +124,6 @@ const RegistrationScreen = () => {
                     />
                   </TouchableOpacity>
                   </View>
-                {isShowKeyboard ? (
-                  <>
                     <TouchableOpacity
                       style={styles.registerBtn}
                       onPress={handlerSubmit}
@@ -127,8 +133,6 @@ const RegistrationScreen = () => {
                     <Text style={styles.text}>
                       Already have an account? Login
                     </Text>
-                  </>
-                ) : null}
               </View>
             </View>
           </KeyboardAvoidingView>
