@@ -192,7 +192,6 @@ const styles = StyleSheet.create({
     top: 12,
     right: 15,
   },
-
   showPasswordIcon: {
     width: 30,
     height: 30,
