@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import {
   TextInput,
   StyleSheet,
@@ -26,6 +26,8 @@ const RegistrationScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
+  const passwordRef = useRef();
+  const emailRef = useRef();
 
   const keyboardHide = () => {
     Keyboard.dismiss();
@@ -45,9 +47,13 @@ const RegistrationScreen = () => {
   return (
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.mainContainer}>
-        <ImageBackground source={image} resizeMode="cover" style={styles.bgImage}>
+        <ImageBackground
+          source={image}
+          resizeMode="cover"
+          style={styles.bgImage}
+        >
           <KeyboardAvoidingView
-          style = {styles.formContainer}
+            style={styles.formContainer}
             behavior={Platform.OS == "ios" ? "marginBottom" : "height"}
           >
             <View
@@ -75,12 +81,15 @@ const RegistrationScreen = () => {
                   placeholder="Login"
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(true)}
-                  onBlur={() => {
-                    setIsShowKeyboard(true);
+                  blurOnSubmit={false}
+                  onSubmitEditing={() => {
+                    emailRef.current.focus();
                   }}
+                  returnKeyType="next"
                 />
                 <View style={{ marginBottom: 16, marginTop: 16 }}>
                   <TextInput
+                    ref={emailRef}
                     value={values.email}
                     onChangeText={(value) =>
                       setValues((prevState) => ({ ...prevState, email: value }))
@@ -88,24 +97,32 @@ const RegistrationScreen = () => {
                     placeholder="Email"
                     style={styles.input}
                     onFocus={() => setIsShowKeyboard(true)}
-                   
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      passwordRef.current.focus();
+                    }}
+                    returnKeyType="next"
                   />
                 </View>
                 <View>
-                <TextInput
-                  value={values.password}
-                  onChangeText={(value) =>
-                    setValues((prevState) => ({
-                      ...prevState,
-                      password: value,
-                    }))
-                  }
-                  placeholder="Password"
-                  secureTextEntry={hidePassword}
-                  style={styles.input}
-                  onFocus={() => setIsShowKeyboard(true)}
-                />
-                <TouchableOpacity
+                  <TextInput
+                    ref={passwordRef}
+                    value={values.password}
+                    onChangeText={(value) =>
+                      setValues((prevState) => ({
+                        ...prevState,
+                        password: value,
+                      }))
+                    }
+                    placeholder="Password"
+                    secureTextEntry={hidePassword}
+                    style={styles.input}
+                    onFocus={() => setIsShowKeyboard(true)}
+                    onSubmitEditing={() => {
+                      setIsShowKeyboard(false);
+                    }}
+                  />
+                  <TouchableOpacity
                     style={styles.showPassword}
                     onPress={handlerHidePassword}
                   >
@@ -118,16 +135,14 @@ const RegistrationScreen = () => {
                       }
                     />
                   </TouchableOpacity>
-                  </View>
-                    <TouchableOpacity
-                      style={styles.registerBtn}
-                      onPress={handlerSubmit}
-                    >
-                      <Text style={styles.btnText}>Register</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.text}>
-                      Already have an account? Login
-                    </Text>
+                </View>
+                <TouchableOpacity
+                  style={styles.registerBtn}
+                  onPress={handlerSubmit}
+                >
+                  <Text style={styles.btnText}>Register</Text>
+                </TouchableOpacity>
+                <Text style={styles.text}>Already have an account? Login</Text>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -143,11 +158,11 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
   },
   bgImage: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: "center",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
     justifyContent: "flex-end",
@@ -157,7 +172,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 25,
     borderTopRightRadius: 25,
-    alignItems: 'center',
+    alignItems: "center",
   },
   avatarWrap: {
     position: "absolute",
@@ -168,7 +183,7 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     backgroundColor: "#F6F6F6",
-    borderRadius: 16, 
+    borderRadius: 16,
   },
   addBtn: {
     position: "absolute",
