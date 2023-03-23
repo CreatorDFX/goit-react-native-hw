@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useRef } from "react";
 import {
   TextInput,
   StyleSheet,
@@ -25,7 +25,7 @@ const LoginScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [hidePassword, setHidePassword] = useState(true);
-
+  const passwordRef = useRef();
 
   const keyboardHide = () => {
     Keyboard.dismiss();
@@ -38,7 +38,6 @@ const LoginScreen = () => {
     setValues(initialFormState);
   };
 
-
   const handlerHidePassword = () => {
     setHidePassword(!hidePassword);
   };
@@ -46,8 +45,8 @@ const LoginScreen = () => {
     <TouchableWithoutFeedback onPress={keyboardHide}>
       <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-              <KeyboardAvoidingView
-                style = {styles.formContainer}
+          <KeyboardAvoidingView
+            style={styles.formContainer}
             behavior={Platform.OS == "ios" ? "marginBottom" : "height"}
           >
             <View
@@ -56,8 +55,8 @@ const LoginScreen = () => {
                 width: Dimensions.get("window").width,
                 marginBottom: isShowKeyboard ? -210 : 0,
               }}
-            >  
-            <Text style={styles.formTitle}>Login</Text>
+            >
+              <Text style={styles.formTitle}>Login</Text>
               <View>
                 <View style={{ marginBottom: 16 }}>
                   <TextInput
@@ -68,13 +67,16 @@ const LoginScreen = () => {
                     placeholder="Email"
                     style={styles.input}
                     onFocus={() => setIsShowKeyboard(true)}
-                    onBlur={() => {
-                      setIsShowKeyboard(false);
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      passwordRef.current.focus();
                     }}
+                    returnKeyType="next"
                   />
                 </View>
                 <View>
                   <TextInput
+                    ref={passwordRef}
                     value={values.password}
                     onChangeText={(value) =>
                       setValues((prevState) => ({
@@ -85,7 +87,7 @@ const LoginScreen = () => {
                     placeholder="Password"
                     style={styles.input}
                     onFocus={() => setIsShowKeyboard(true)}
-                    onBlur={() => {
+                    onSubmitEditing={() => {
                       setIsShowKeyboard(false);
                     }}
                     secureTextEntry={hidePassword}
@@ -104,16 +106,14 @@ const LoginScreen = () => {
                     />
                   </TouchableOpacity>
                 </View>
-                    <TouchableOpacity
-                      activeOpacity={0.8}
-                      style={styles.loginBtn}
-                      onPress={handlerSubmit}
-                    >
-                      <Text style={styles.btnText}>Login</Text>
-                    </TouchableOpacity>
-                  <Text style={styles.text}>
-                    Don't have an account? Register
-                  </Text>
+                <TouchableOpacity
+                  activeOpacity={0.8}
+                  style={styles.loginBtn}
+                  onPress={handlerSubmit}
+                >
+                  <Text style={styles.btnText}>Login</Text>
+                </TouchableOpacity>
+                <Text style={styles.text}>Don't have an account? Register</Text>
               </View>
             </View>
           </KeyboardAvoidingView>
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
+    justifyContent: "flex-end",
     width: Dimensions.get("window").width,
     height: Dimensions.get("window").height,
   },
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto-Regular",
   },
   text: {
-    textAlign: 'center',
+    textAlign: "center",
     marginTop: 16,
     marginBottom: 111,
     fontSize: 16,

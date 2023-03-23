@@ -76,7 +76,7 @@ const RegistrationScreen = () => {
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(true)}
                   onBlur={() => {
-                    setIsShowKeyboard(false);
+                    setIsShowKeyboard(true);
                   }}
                 />
                 <View style={{ marginBottom: 16, marginTop: 16 }}>
@@ -88,9 +88,7 @@ const RegistrationScreen = () => {
                     placeholder="Email"
                     style={styles.input}
                     onFocus={() => setIsShowKeyboard(true)}
-                    onBlur={() => {
-                      setIsShowKeyboard(false);
-                    }}
+                   
                   />
                 </View>
                 <View>
@@ -106,9 +104,6 @@ const RegistrationScreen = () => {
                   secureTextEntry={hidePassword}
                   style={styles.input}
                   onFocus={() => setIsShowKeyboard(true)}
-                  onBlur={() => {
-                    setIsShowKeyboard(false);
-                  }}
                 />
                 <TouchableOpacity
                     style={styles.showPassword}
