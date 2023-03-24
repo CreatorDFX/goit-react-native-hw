@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   avatarWrap: {
     position: "absolute",
-    left: 148,
+    left: 143,
     top: -60,
   },
   avatar: {
