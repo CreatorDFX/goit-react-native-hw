@@ -110,12 +110,11 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     textAlign: "center",
-    fontWeight: 500,
     fontSize: 30,
     color: "#212121",
     marginBottom: 32,
     marginTop: 32,
-    fontFamily: "Roboto-Regular",
+    fontFamily: "Roboto-Medium",
   },
   input: {
     width: 350,

@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   },
   avatarWrap: {
     position: "absolute",
-    left: 143,
+    left: 142,
     top: -60,
   },
   avatar: {
@@ -145,11 +145,10 @@ const styles = StyleSheet.create({
   },
   formTitle: {
     textAlign: "center",
-    fontWeight: 500,
     fontSize: 30,
     color: "#212121",
     marginBottom: 32,
-    fontFamily: "Roboto-Regular",
+    fontFamily: "Roboto-Medium",
   },
   input: {
     width: 350,
