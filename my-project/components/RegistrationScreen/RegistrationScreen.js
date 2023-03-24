@@ -1,20 +1,18 @@
-import React, { useState, useRef } from "react";
+import { useState, useRef } from "react";
 import {
   TextInput,
   StyleSheet,
-  TouchableWithoutFeedback,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   Text,
   View,
   Image,
-  TouchableOpacity,
-  ImageBackground,
   Dimensions,
 } from "react-native";
 
-import image from "../../assets/image/bgImg.jpg";
+import BackgroundImage from "../BackgroundImg";
+import KeyboardWrapper from "../KeyboardWrapper";
+import PrimaryButton from "../PrimaryButton";
+import ShowPassword from "../ShowPassword";
 
 const initialFormState = {
   login: "",
@@ -29,11 +27,6 @@ const RegistrationScreen = () => {
   const passwordRef = useRef();
   const emailRef = useRef();
 
-  const keyboardHide = () => {
-    Keyboard.dismiss();
-    setIsShowKeyboard(false);
-  };
-
   const handlerSubmit = () => {
     console.log(values);
     Keyboard.dismiss();
@@ -45,128 +38,86 @@ const RegistrationScreen = () => {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={keyboardHide}>
-      <View style={styles.mainContainer}>
-        <ImageBackground
-          source={image}
-          resizeMode="cover"
-          style={styles.bgImage}
+    <BackgroundImage>
+      <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard}>
+        <View
+          style={{
+            ...styles.formWrap,
+            width: Dimensions.get("window").width,
+            marginBottom: isShowKeyboard ? -150 : 0,
+          }}
         >
-          <KeyboardAvoidingView
-            style={styles.formContainer}
-            behavior={Platform.OS == "ios" ? "marginBottom" : "height"}
-          >
-            <View
-              style={{
-                ...styles.formWrap,
-                width: Dimensions.get("window").width,
-                marginBottom: isShowKeyboard ? -150 : 0,
-              }}
-            >
-              <Text style={styles.formTitle}>Registration</Text>
-              <View style={styles.avatarWrap}>
-                <View style={styles.avatar}>
-                  <Image
-                    source={require("../../assets/image/addBtn.png")}
-                    style={styles.addBtn}
-                  />
-                </View>
-              </View>
-              <View>
-                <TextInput
-                  value={values.login}
-                  onChangeText={(value) =>
-                    setValues((prevState) => ({ ...prevState, login: value }))
-                  }
-                  placeholder="Login"
-                  style={styles.input}
-                  onFocus={() => setIsShowKeyboard(true)}
-                  blurOnSubmit={false}
-                  onSubmitEditing={() => {
-                    emailRef.current.focus();
-                  }}
-                  returnKeyType="next"
-                />
-                <View style={{ marginBottom: 16, marginTop: 16 }}>
-                  <TextInput
-                    ref={emailRef}
-                    value={values.email}
-                    onChangeText={(value) =>
-                      setValues((prevState) => ({ ...prevState, email: value }))
-                    }
-                    placeholder="Email"
-                    style={styles.input}
-                    onFocus={() => setIsShowKeyboard(true)}
-                    blurOnSubmit={false}
-                    onSubmitEditing={() => {
-                      passwordRef.current.focus();
-                    }}
-                    returnKeyType="next"
-                  />
-                </View>
-                <View>
-                  <TextInput
-                    ref={passwordRef}
-                    value={values.password}
-                    onChangeText={(value) =>
-                      setValues((prevState) => ({
-                        ...prevState,
-                        password: value,
-                      }))
-                    }
-                    placeholder="Password"
-                    secureTextEntry={hidePassword}
-                    style={styles.input}
-                    onFocus={() => setIsShowKeyboard(true)}
-                    onSubmitEditing={() => {
-                      setIsShowKeyboard(false);
-                    }}
-                  />
-                  <TouchableOpacity
-                    style={styles.showPassword}
-                    onPress={handlerHidePassword}
-                  >
-                    <Image
-                      style={styles.showPasswordIcon}
-                      source={
-                        hidePassword
-                          ? require("../../assets/image/show.png")
-                          : require("../../assets/image/unshow.png")
-                      }
-                    />
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                  style={styles.registerBtn}
-                  onPress={handlerSubmit}
-                >
-                  <Text style={styles.btnText}>Register</Text>
-                </TouchableOpacity>
-                <Text style={styles.text}>Already have an account? Login</Text>
-              </View>
+          <Text style={styles.formTitle}>Registration</Text>
+          <View style={styles.avatarWrap}>
+            <View style={styles.avatar}>
+              <Image
+                source={require("../../assets/image/addBtn.png")}
+                style={styles.addBtn}
+              />
             </View>
-          </KeyboardAvoidingView>
-        </ImageBackground>
-      </View>
-    </TouchableWithoutFeedback>
+          </View>
+          <View>
+            <TextInput
+              value={values.login}
+              onChangeText={(value) =>
+                setValues((prevState) => ({ ...prevState, login: value }))
+              }
+              placeholder="Login"
+              style={styles.input}
+              onFocus={() => setIsShowKeyboard(true)}
+              blurOnSubmit={false}
+              onSubmitEditing={() => {
+                emailRef.current.focus();
+              }}
+              returnKeyType="next"
+            />
+            <View style={{ marginBottom: 16, marginTop: 16 }}>
+              <TextInput
+                ref={emailRef}
+                value={values.email}
+                onChangeText={(value) =>
+                  setValues((prevState) => ({ ...prevState, email: value }))
+                }
+                placeholder="Email"
+                style={styles.input}
+                onFocus={() => setIsShowKeyboard(true)}
+                blurOnSubmit={false}
+                onSubmitEditing={() => {
+                  passwordRef.current.focus();
+                }}
+                returnKeyType="next"
+              />
+            </View>
+            <View>
+              <TextInput
+                ref={passwordRef}
+                value={values.password}
+                onChangeText={(value) =>
+                  setValues((prevState) => ({
+                    ...prevState,
+                    password: value,
+                  }))
+                }
+                placeholder="Password"
+                secureTextEntry={hidePassword}
+                style={styles.input}
+                onFocus={() => setIsShowKeyboard(true)}
+                onSubmitEditing={() => {
+                  setIsShowKeyboard(false);
+                }}
+              />
+              <ShowPassword onPress={handlerHidePassword} />
+            </View>
+            <PrimaryButton onPress={handlerSubmit} title={"Register"} />
+            <Text style={styles.text}>Already have an account? Login</Text>
+          </View>
+        </View>
+      </KeyboardWrapper>
+    </BackgroundImage>
   );
 };
 
 const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-  },
-  formContainer: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  bgImage: {
-    flex: 1,
-    alignItems: "center",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
-    justifyContent: "flex-end",
-  },
   formWrap: {
     paddingTop: 92,
     backgroundColor: "#FFFFFF",
@@ -209,21 +160,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: "#F6F6F6",
   },
-  registerBtn: {
-    height: 51,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
-    marginTop: 43,
-    borderColor: "transparent",
-    backgroundColor: "#FF6C00",
-  },
-  btnText: {
-    textAlign: "center",
-    fontSize: 16,
-    color: "#FFFFFF",
-    fontFamily: "Roboto-Regular",
-  },
   text: {
     marginTop: 16,
     marginBottom: 45,
@@ -231,15 +167,6 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     textAlign: "center",
     fontFamily: "Roboto-Regular",
-  },
-  showPassword: {
-    position: "absolute",
-    top: 12,
-    right: 15,
-  },
-  showPasswordIcon: {
-    width: 30,
-    height: 30,
   },
 });
 
