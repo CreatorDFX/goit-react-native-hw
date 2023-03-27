@@ -4,6 +4,8 @@ import LoginScreen from './components/LoginScreen/LoginScreen'
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
+import PostScreen from "./components/PostsScreen";
+import CreatePostsScreen from "./components/CreatePostsScreen";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -25,8 +27,10 @@ export default function App() {
 
   return (
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <RegistrationScreen />
+      {/* <PostScreen/> */}
+      {/* <RegistrationScreen /> */}
       {/* <LoginScreen/> */}
+    <CreatePostsScreen/>
     </View>
   );
 }
