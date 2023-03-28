@@ -11,9 +11,9 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons'; 
 
-import BackgroundImage from "../BackgroundImg";
-import KeyboardWrapper from "../KeyboardWrapper";
-import PrimaryButton from "../PrimaryButton";
+import BackgroundImage from "../../components/BackgroundImg";
+import KeyboardWrapper from "../../components/KeyboardWrapper";
+import PrimaryButton from "../../components/PrimaryButton";
 
 
 const initialFormState = {
@@ -34,6 +34,7 @@ const RegistrationScreen = ({navigation}) => {
     console.log(values);
     Keyboard.dismiss();
     setValues(initialFormState);
+    navigation.navigate("Home");
   };
 
   const handlePasswordVisibility = () => {

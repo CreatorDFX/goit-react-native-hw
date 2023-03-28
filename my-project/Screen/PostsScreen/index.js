@@ -5,15 +5,14 @@ import {
   Dimensions,
   TouchableOpacity,
 } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import { Octicons } from '@expo/vector-icons'; 
+import { Feather } from "@expo/vector-icons"; 
 
-export default function PostsScreen() {
+export default function PostsScreen({navigation}) {
   return (
     <View style={styles.mainContainer}>
       <View style={styles.postContainer}>
         <Text style={styles.postTitle}>Posts</Text>
-        <TouchableOpacity style={styles.logoutBtn}>
+        <TouchableOpacity onPress={() => navigation.navigate("Register")} style={styles.logoutBtn}>
           <Feather
             name="log-out"
             size={24}
@@ -21,20 +20,6 @@ export default function PostsScreen() {
             style={styles.logoutIcon}
           />
         </TouchableOpacity>
-        </View>
-        <View style={styles.navigateContainer} >
-          <TouchableOpacity>
-          <Octicons name="apps" size={24} color="#212121" />
-          </TouchableOpacity>
-         
-            <TouchableOpacity style={styles.createPostBtn} >
-            <Feather name="plus" size={14} color="white" />
-            </TouchableOpacity>
-    
-
-          <TouchableOpacity>
-          <Feather name="user" size={24} color="#212121" />
-          </TouchableOpacity>
         </View>
     </View>
   );

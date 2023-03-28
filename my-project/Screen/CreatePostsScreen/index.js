@@ -37,7 +37,7 @@ export default function CreatePostsScreen() {
       setIsShowKeyboard(false);
     }}>
         <KeyboardAvoidingView
-          style={styles.formContainer}
+          style={styles.mainContainer}
           behavior={Platform.OS == "ios" ? "padding" : "height"}
         >
       <View style={styles.postContainer}>
@@ -67,7 +67,7 @@ export default function CreatePostsScreen() {
             onChangeText={(value) =>
               setValues((prevState) => ({ ...prevState, name: value }))
             }
-            placeholder="Name"
+            placeholder="Name..."
             style={styles.input}
             returnKeyType="next"
             onFocus={() => setIsShowKeyboard(true)}
@@ -82,7 +82,7 @@ export default function CreatePostsScreen() {
               onChangeText={(value) =>
                 setValues((prevState) => ({ ...prevState, location: value }))
               }
-              placeholder="Location"
+              placeholder="Location..."
               style={{...styles.input, paddingLeft: 28}}
             />
             <View style={styles.locationPoint}>
@@ -103,6 +103,10 @@ export default function CreatePostsScreen() {
 }
 
 const styles = StyleSheet.create({
+  mainContainer: {
+    flex: 1,
+    backgroundColor: "white",
+  },
   uploadWrap: {
     paddingTop: 32,
     paddingLeft: 16,
@@ -111,7 +115,6 @@ const styles = StyleSheet.create({
   postContainer: {
     justifyContent: "flex-end",
     width: Dimensions.get("window").width,
-    backgroundColor: "white",
     height: 88,
     padding: 11,
     borderWidth: 1,
@@ -209,7 +212,7 @@ const styles = StyleSheet.create({
     borderColor: "transparent",
     backgroundColor: "#F6F6F6",
     position: 'absolute',
-    bottom: -147,
+    bottom: -85,
     left: 160,
   },
 });

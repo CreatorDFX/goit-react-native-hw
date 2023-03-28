@@ -1,8 +1,9 @@
 import { View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import RegistrationScreen from "./components/RegistrationScreen/RegistrationScreen";
-import LoginScreen from './components/LoginScreen/LoginScreen'
+import RegistrationScreen from "./Screen/RegistrationScreen/RegistrationScreen";
+import LoginScreen from './Screen/LoginScreen/LoginScreen'
+import Home from "./Screen/Home/Home";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
@@ -39,6 +40,11 @@ export default function App() {
         < AuthStack.Screen  options={{
             headerShown: false,
           }} name="Login" component={LoginScreen} />
+           <AuthStack.Screen
+            options={{ headerShown: false }}
+            name="Home"
+            component={Home}
+          />
       </AuthStack.Navigator> 
     </NavigationContainer> 
     </View>

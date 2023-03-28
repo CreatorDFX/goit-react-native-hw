@@ -12,9 +12,9 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 
-import BackgroundImage from "../BackgroundImg";
-import KeyboardWrapper from "../KeyboardWrapper";
-import PrimaryButton from "../PrimaryButton";
+import BackgroundImage from "../../components/BackgroundImg";
+import KeyboardWrapper from "../../components/KeyboardWrapper";
+import PrimaryButton from "../../components/PrimaryButton";
 
 const initialFormState = {
   email: "",
@@ -22,12 +22,12 @@ const initialFormState = {
 };
 
 const LoginScreen = ({navigation}) => {
+
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [rightIcon, setRightIcon] = useState("eye");
   const passwordRef = useRef();
-
   const keyboardHide = () => {
     Keyboard.dismiss();
     setIsShowKeyboard(false);
@@ -37,6 +37,7 @@ const LoginScreen = ({navigation}) => {
     console.log(values);
     Keyboard.dismiss();
     setValues(initialFormState);
+    navigation.navigate("Home");
   };
 
   const handlePasswordVisibility = () => {
@@ -105,7 +106,7 @@ const LoginScreen = ({navigation}) => {
                 />
               </Pressable>
             </View>
-            <PrimaryButton onPress={handlerSubmit} title={"Login"} />
+            <PrimaryButton onPress={handlerSubmit} title={"Login"}/>
             <Text
               onPress={() => navigation.navigate("Register")}
               style={styles.text}
