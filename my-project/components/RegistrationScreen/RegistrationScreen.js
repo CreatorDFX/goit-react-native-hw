@@ -5,7 +5,6 @@ import {
   Keyboard,
   Text,
   View,
-  Image,
   Dimensions,
   Pressable,
 } from "react-native";
@@ -23,7 +22,7 @@ const initialFormState = {
   password: "",
 };
 
-const RegistrationScreen = () => {
+const RegistrationScreen = ({navigation}) => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(true);
@@ -49,7 +48,10 @@ const RegistrationScreen = () => {
 
   return (
     <BackgroundImage>
-      <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard} style= {styles.cohttgh}>
+      <KeyboardWrapper
+        setIsShowKeyboard={setIsShowKeyboard}
+        style={styles.cohttgh}
+      >
         <View
           style={{
             ...styles.formWrap,
@@ -60,7 +62,12 @@ const RegistrationScreen = () => {
           <Text style={styles.formTitle}>Registration</Text>
           <View style={styles.avatarWrap}>
             <View style={styles.avatar}>
-            <Ionicons name="add-circle-outline" size={25} color="#FF6C00" style={styles.addBtn}/>
+              <Ionicons
+                name="add-circle-outline"
+                size={25}
+                color="#FF6C00"
+                style={styles.addBtn}
+              />
             </View>
           </View>
           <View>
@@ -125,7 +132,12 @@ const RegistrationScreen = () => {
               </Pressable>
             </View>
             <PrimaryButton onPress={handlerSubmit} title={"Register"} />
-            <Text style={styles.text}>Already have an account? Login</Text>
+            <Text
+              onPress={() => navigation.navigate("Login")}
+              style={styles.text}
+            >
+              Already have an account? Login
+            </Text>
           </View>
         </View>
       </KeyboardWrapper>

@@ -6,7 +6,7 @@ import {
   Text,
   View,
   Dimensions,
-  Pressable
+  Pressable,
 } from "react-native";
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -21,7 +21,7 @@ const initialFormState = {
   password: "",
 };
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(true);
@@ -94,7 +94,7 @@ const LoginScreen = () => {
                 }}
                 secureTextEntry={passwordVisibility}
               />
-                 <Pressable
+              <Pressable
                 style={styles.showPassword}
                 onPress={handlePasswordVisibility}
               >
@@ -106,7 +106,12 @@ const LoginScreen = () => {
               </Pressable>
             </View>
             <PrimaryButton onPress={handlerSubmit} title={"Login"} />
-            <Text style={styles.text}>Don't have an account? Register</Text>
+            <Text
+              onPress={() => navigation.navigate("Register")}
+              style={styles.text}
+            >
+              Don't have an account? Register
+            </Text>
           </View>
         </View>
       </KeyboardWrapper>
