@@ -1,16 +1,13 @@
-import { Text, View, StyleSheet, Dimensions, TouchableOpacity, Image } from "react-native";
+import { Text, View, StyleSheet, Dimensions, TouchableOpacity } from "react-native";
+import { Feather } from '@expo/vector-icons'; 
 
 export default function PostScreen() {
   return (
     <View style={styles.postContainer}>
-      <Text style={styles.postTitle}>Publication</Text>
+      <Text style={styles.postTitle}>Posts</Text>
       <TouchableOpacity  style={styles.logoutBtn}>
-      <Image
-          style={styles.logoutIcon}
-          source={require('../../assets/image/logout.png')}
-        />
+      <Feather name="log-out" size={24} color="#BDBDBD" style={styles.logoutIcon}/>  
       </TouchableOpacity>
-
     </View>
   );
 }
@@ -40,8 +37,4 @@ const styles = StyleSheet.create({
     right: 0,
     top: 42,
   },
-  logoutIcon: {
-    width: 24,
-    height: 24,
-  }
 });

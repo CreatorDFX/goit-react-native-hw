@@ -6,11 +6,14 @@ import {
   Text,
   View,
   Dimensions,
+  Pressable
 } from "react-native";
+
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+
 
 import BackgroundImage from "../BackgroundImg";
 import KeyboardWrapper from "../KeyboardWrapper";
-import ShowPassword from "../ShowPassword";
 import PrimaryButton from "../PrimaryButton";
 
 const initialFormState = {
@@ -21,7 +24,8 @@ const initialFormState = {
 const LoginScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [hidePassword, setHidePassword] = useState(true);
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [rightIcon, setRightIcon] = useState("eye");
   const passwordRef = useRef();
 
   const keyboardHide = () => {
@@ -35,8 +39,14 @@ const LoginScreen = () => {
     setValues(initialFormState);
   };
 
-  const handlerHidePassword = () => {
-    setHidePassword(!hidePassword);
+  const handlePasswordVisibility = () => {
+    if (rightIcon === "eye") {
+      setRightIcon("eye-off");
+      setPasswordVisibility(!passwordVisibility);
+    } else if (rightIcon === "eye-off") {
+      setRightIcon("eye");
+      setPasswordVisibility(!passwordVisibility);
+    }
   };
   return (
     <BackgroundImage>
@@ -82,9 +92,18 @@ const LoginScreen = () => {
                 onSubmitEditing={() => {
                   setIsShowKeyboard(false);
                 }}
-                secureTextEntry={hidePassword}
+                secureTextEntry={passwordVisibility}
               />
-              <ShowPassword onPress={handlerHidePassword} />
+                 <Pressable
+                style={styles.showPassword}
+                onPress={handlePasswordVisibility}
+              >
+                <MaterialCommunityIcons
+                  name={rightIcon}
+                  size={26}
+                  color="#FF6C00"
+                />
+              </Pressable>
             </View>
             <PrimaryButton onPress={handlerSubmit} title={"Login"} />
             <Text style={styles.text}>Don't have an account? Register</Text>
@@ -132,6 +151,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#1B4371",
     fontFamily: "Roboto-Regular",
+  },
+  showPassword: {
+    position: "absolute",
+    top: 13,
+    right: 15,
   },
 });
 

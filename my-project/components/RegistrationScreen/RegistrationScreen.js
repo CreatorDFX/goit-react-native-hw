@@ -7,12 +7,15 @@ import {
   View,
   Image,
   Dimensions,
+  Pressable,
 } from "react-native";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from '@expo/vector-icons'; 
 
 import BackgroundImage from "../BackgroundImg";
 import KeyboardWrapper from "../KeyboardWrapper";
 import PrimaryButton from "../PrimaryButton";
-import ShowPassword from "../ShowPassword";
+
 
 const initialFormState = {
   login: "",
@@ -23,7 +26,8 @@ const initialFormState = {
 const RegistrationScreen = () => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [hidePassword, setHidePassword] = useState(true);
+  const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [rightIcon, setRightIcon] = useState("eye");
   const passwordRef = useRef();
   const emailRef = useRef();
 
@@ -33,13 +37,19 @@ const RegistrationScreen = () => {
     setValues(initialFormState);
   };
 
-  const handlerHidePassword = () => {
-    setHidePassword(!hidePassword);
+  const handlePasswordVisibility = () => {
+    if (rightIcon === "eye") {
+      setRightIcon("eye-off");
+      setPasswordVisibility(!passwordVisibility);
+    } else if (rightIcon === "eye-off") {
+      setRightIcon("eye");
+      setPasswordVisibility(!passwordVisibility);
+    }
   };
 
   return (
     <BackgroundImage>
-      <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard}>
+      <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard} style= {styles.cohttgh}>
         <View
           style={{
             ...styles.formWrap,
@@ -50,10 +60,7 @@ const RegistrationScreen = () => {
           <Text style={styles.formTitle}>Registration</Text>
           <View style={styles.avatarWrap}>
             <View style={styles.avatar}>
-              <Image
-                source={require("../../assets/image/addBtn.png")}
-                style={styles.addBtn}
-              />
+            <Ionicons name="add-circle-outline" size={25} color="#FF6C00" style={styles.addBtn}/>
             </View>
           </View>
           <View>
@@ -99,14 +106,23 @@ const RegistrationScreen = () => {
                   }))
                 }
                 placeholder="Password"
-                secureTextEntry={hidePassword}
+                secureTextEntry={passwordVisibility}
                 style={styles.input}
                 onFocus={() => setIsShowKeyboard(true)}
                 onSubmitEditing={() => {
                   setIsShowKeyboard(false);
                 }}
               />
-              <ShowPassword onPress={handlerHidePassword} />
+              <Pressable
+                style={styles.showPassword}
+                onPress={handlePasswordVisibility}
+              >
+                <MaterialCommunityIcons
+                  name={rightIcon}
+                  size={26}
+                  color="#FF6C00"
+                />
+              </Pressable>
             </View>
             <PrimaryButton onPress={handlerSubmit} title={"Register"} />
             <Text style={styles.text}>Already have an account? Login</Text>
@@ -118,6 +134,11 @@ const RegistrationScreen = () => {
 };
 
 const styles = StyleSheet.create({
+  cohttgh: {
+    flex: 1,
+    justifyContent: "flex-end",
+
+  }, 
   formWrap: {
     paddingTop: 92,
     backgroundColor: "#FFFFFF",
@@ -138,9 +159,7 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     position: "absolute",
-    width: 25,
-    height: 25,
-    left: 106,
+    left: 108,
     top: 84,
   },
   formTitle: {
@@ -166,6 +185,11 @@ const styles = StyleSheet.create({
     color: "#1B4371",
     textAlign: "center",
     fontFamily: "Roboto-Regular",
+  },
+  showPassword: {
+    position: "absolute",
+    top: 13,
+    right: 15,
   },
 });
 

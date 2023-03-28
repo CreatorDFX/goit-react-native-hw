@@ -4,12 +4,19 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Image,
   TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  KeyboardAvoidingView,
+
 } from "react-native";
 import { useState, useRef } from "react";
+import { AntDesign } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { SimpleLineIcons } from '@expo/vector-icons';
 
 const initialPostState = {
+  photo: "",
   name: "",
   location: "",
 };
@@ -18,23 +25,37 @@ export default function CreatePostsScreen() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const locationRef = useRef();
 
+  const handlerSubmit = () => {
+    console.log(values);
+    Keyboard.dismiss();
+    setValues(initialPostState);
+  };
+
   return (
-    <>
+    <TouchableWithoutFeedback onPress={() => {
+      Keyboard.dismiss();
+      setIsShowKeyboard(false);
+    }}>
+        <KeyboardAvoidingView
+          style={styles.formContainer}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        >
       <View style={styles.postContainer}>
-        <Text style={styles.postTitle}>Create publication</Text>
+        <Text style={styles.postTitle}>Create post</Text>
         <TouchableOpacity style={styles.logoutBtn}>
-          <Image
-            style={styles.logoutIcon}
-            source={require("../../assets/image/arrow-left.png")}
-          />
+          <AntDesign name="arrowleft" size={24} color="#BDBDBD" />
         </TouchableOpacity>
       </View>
       <View style={styles.uploadWrap}>
         <View style={styles.uploadPhoto}>
-          <Image
-            style={styles.uploadIcon}
-            source={require("../../assets/image/uploadIcon.png")}
-          />
+          <View style={styles.uploadIconWrap}>
+            <FontAwesome
+              name="camera"
+              size={24}
+              color="#BDBDBD"
+              style={styles.uploadIcon}
+            />
+          </View>
         </View>
         <TouchableOpacity style={styles.uploadBtn}>
           <Text style={styles.uploadBtnText}>Upload photo</Text>
@@ -62,26 +83,22 @@ export default function CreatePostsScreen() {
                 setValues((prevState) => ({ ...prevState, location: value }))
               }
               placeholder="Location"
-              style={styles.input}
+              style={{...styles.input, paddingLeft: 28}}
             />
             <View style={styles.locationPoint}>
-              <Image
-                style={styles.locationIcon}
-                source={require("../../assets/image/map-pin.png")}
-              />
+            <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD" />
             </View>
           </View>
         </View>
-        <TouchableOpacity style={styles.uploadFormBtn}>
-          <Text style={styles.uploadFormBtnText}>Publish</Text>
+        <TouchableOpacity style={styles.uploadFormBtn} onPress={handlerSubmit}>
+          <Text style={styles.uploadFormBtnText}>Add post</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.removeBtn}>
-          <Image
-            source={require("../../assets/image/trash-2.png")}
-          />
+        <AntDesign name="delete" size={24} color="#BDBDBD"/>
         </TouchableOpacity>
       </View>
-    </>
+      </KeyboardAvoidingView>
+        </TouchableWithoutFeedback>
   );
 }
 
@@ -114,10 +131,6 @@ const styles = StyleSheet.create({
     left: 0,
     top: 42,
   },
-  logoutIcon: {
-    width: 24,
-    height: 24,
-  },
   postFormWrap: {
     flex: 1,
     justifyContent: "flex-start",
@@ -130,6 +143,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "#E8E8E8",
     backgroundColor: "white",
+    fontSize: 16,
+    lineHeight: 19,
   },
   uploadBtn: {
     height: 19,
@@ -146,6 +161,19 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderColor: "#E8E8E8",
   },
+  uploadIconWrap: {
+    flex: 1,
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    backgroundColor: "white",
+    position: 'absolute',
+    top: 90,
+    left: 150,
+  },
   uploadBtnText: {
     fontSize: 16,
     lineHeight: 19,
@@ -156,9 +184,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 12,
     left: 0,
-  },
-  locationIcon: {
-    marginRight: 10,
   },
   uploadFormBtn: {
     height: 51,
@@ -183,6 +208,8 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     borderColor: "transparent",
     backgroundColor: "#F6F6F6",
-    marginTop: 107,
+    position: 'absolute',
+    bottom: -147,
+    left: 160,
   },
 });

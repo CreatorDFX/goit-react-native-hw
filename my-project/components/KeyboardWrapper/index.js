@@ -22,7 +22,6 @@ import {
   )
 }
 
-
 const styles = StyleSheet.create({
     formContainer: {
       flex: 1,
