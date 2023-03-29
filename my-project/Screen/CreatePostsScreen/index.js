@@ -20,7 +20,7 @@ const initialPostState = {
   name: "",
   location: "",
 };
-export default function CreatePostsScreen() {
+export default function CreatePostsScreen({navigation}) {
   const [values, setValues] = useState(initialPostState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const locationRef = useRef();
@@ -42,7 +42,7 @@ export default function CreatePostsScreen() {
         >
       <View style={styles.postContainer}>
         <Text style={styles.postTitle}>Create post</Text>
-        <TouchableOpacity style={styles.logoutBtn}>
+        <TouchableOpacity style={styles.arrowLeftBtn} onPress={() => navigation.navigate("Posts")}>
           <AntDesign name="arrowleft" size={24} color="#BDBDBD" />
         </TouchableOpacity>
       </View>
@@ -90,10 +90,10 @@ export default function CreatePostsScreen() {
             </View>
           </View>
         </View>
-        <TouchableOpacity style={styles.uploadFormBtn} onPress={handlerSubmit}>
-          <Text style={styles.uploadFormBtnText}>Add post</Text>
+        <TouchableOpacity style={styles.createPostBtn} onPress={handlerSubmit}>
+          <Text style={styles.createPostBtnText}>Add post</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.removeBtn}>
+        <TouchableOpacity style={styles.removePostBtn}>
         <AntDesign name="delete" size={24} color="#BDBDBD"/>
         </TouchableOpacity>
       </View>
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
     letterSpacing: -0.408,
     color: " #212121",
   },
-  logoutBtn: {
+  arrowLeftBtn: {
     padding: 10,
     position: "absolute",
     left: 0,
@@ -188,31 +188,33 @@ const styles = StyleSheet.create({
     top: 12,
     left: 0,
   },
-  uploadFormBtn: {
+  createPostBtn: {
     height: 51,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
     borderColor: "transparent",
     backgroundColor: "#F6F6F6",
-    marginTop: 160,
+    marginTop: 150,
+    marginBottom: 120,
   },
-  uploadFormBtnText: {
+  createPostBtnText: {
     textAlign: "center",
     fontSize: 16,
     color: "#BDBDBD",
     fontFamily: "Roboto-Regular",
   },
-  removeBtn: {
+  removePostBtn: {
     width: 70,
     height: 40,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 100,
+    marginHorizontal: 'auto',
+    borderRadius: 20,
     borderColor: "transparent",
     backgroundColor: "#F6F6F6",
     position: 'absolute',
-    bottom: -85,
-    left: 160,
+    bottom: 0,
+    left: "45%",
   },
 });

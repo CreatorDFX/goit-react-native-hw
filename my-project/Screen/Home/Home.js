@@ -9,25 +9,34 @@ import { Feather } from "@expo/vector-icons";
 
 const MainTabs = createBottomTabNavigator();
 
-const Home = ({ navigation }) => {
+const Home = () => {
   return (
-    <MainTabs.Navigator>
+    <MainTabs.Navigator
+    screenOptions={{
+      tabBarStyle: {height: 83, paddingHorizontal: 82, paddingBottom: 22},
+    }}
+    
+    >
       <MainTabs.Screen
         options={{
           tabBarIcon: () => (
-            <SimpleLineIcons name="grid" size={24} color="#bdbdbd" />
+            <SimpleLineIcons name="grid" size={28} color="#bdbdbd" />
           ),
           headerShown: false,
           tabBarShowLabel: false,
         }}
+        
         name="Posts"
         component={PostsScreen}
       />
       <MainTabs.Screen
         options={{
+          tabBarStyle: {
+            display: "none",
+          },
           tabBarIcon: () => (
             <View style={styles.createPostButton}>
-              <Feather name="plus" size={14} color="white" />
+              <Feather name="plus" size={18} color="white" />
             </View>
           ),
           tabBarShowLabel: false,
@@ -40,11 +49,16 @@ const Home = ({ navigation }) => {
             e.preventDefault();
             navigation.navigate("Create");
           },
+          navigationOptions:()=>{
+            return {
+              tabBarVisible:false,
+            };
+         }
         })}
       />
       <MainTabs.Screen
         options={{
-          tabBarIcon: () => <Feather name="user" size={24} color="#bdbdbd" />,
+          tabBarIcon: () => <Feather name="user" size={28} color="#bdbdbd" />,
           tabBarShowLabel: false,
           headerShown: false,
         }}
@@ -65,5 +79,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
+
 
 export default Home;

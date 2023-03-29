@@ -53,27 +53,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 0,
     top: 42,
-  },
-  navigateContainer: {
-    position: 'absolute',
-    bottom: 0,
-    flexDirection: 'row',
-    alignItems: 'baseline',
-    justifyContent: 'center',
-    width: Dimensions.get("window").width,
-    height: 88,
-    padding: 11,
-    borderWidth: 1,
-    borderColor: "#E8E8E8",
-  },
-  createPostBtn: {
-    width: 70,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-    borderRadius: 100,
-    marginHorizontal: 31,
-    borderColor: "transparent",
-    backgroundColor: "#FF6C00",
-  },
+  }
 });

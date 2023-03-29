@@ -7,9 +7,6 @@ import Home from "./Screen/Home/Home";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
-import PostsScreen from "./Screen/PostsScreen";
-import CreatePostsScreen from "./Screen/CreatePostsScreen";
-import ProfileScreen from "./Screen/ProfileScreen";
 
 SplashScreen.preventAutoHideAsync();
 const AuthStack = createStackNavigator();
