@@ -17,41 +17,37 @@ import { useState, useRef, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from '@expo/vector-icons';
-import KeyboardWrapper from "../../components/KeyboardWrapper";
+
 
 const initialPostState = {
+  photo: null,
   name: "",
   location: "",
 };
 
 
 export default function CreatePostsScreen({navigation}) {
-  const [photo, setPhoto] = useState(null);
-  const [values, setValues] = useState(initialPostState);
+  const [photo, setPhoto] = useState(null)
+  const [name, setName] = useState('');
+  const [location, setLocation] = useState('')
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const locationRef = useRef();
-
-  const [hasPermission, setHasPermission] = useState(null);
   const [camera, setCamera] = useState(null);
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
     setPhoto(photo.uri);
-    console.log("photo", photo);
   };
   
-
   const [permission, requestPermission] = Camera.useCameraPermissions();
-
   if (!permission) {
     return <View />;
   }
 
-
   if (!permission.granted) {
     return (
       <View style={styles.container}>
-        <Text style={{ textAlign: "center", marginTop: 100 }}>
+        <Text>
           We need your permission to show the camera
         </Text>
         <Button onPress={requestPermission} title="grant permission" />
@@ -60,9 +56,16 @@ export default function CreatePostsScreen({navigation}) {
   }
 
   const handlerSubmit = () => {
-    console.log(values);
+    console.log(name, location, photo);
     Keyboard.dismiss();
-    setValues(initialPostState);
+    setLocation('');
+    setName('');
+    setPhoto('');
+    sendPhoto();
+  };
+
+  const sendPhoto = () => {
+    navigation.navigate("Posts", { photo });
   };
 
   return (
@@ -74,11 +77,14 @@ export default function CreatePostsScreen({navigation}) {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
-      {/* <KeyboardAvoidingView
-           style={{ flex: 1 }}
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        > */}
-        <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard}>
+      <TouchableWithoutFeedback onPress={() => {
+        Keyboard.dismiss();
+        setIsShowKeyboard(false);
+      }}>
+          <KeyboardAvoidingView
+             style={{ flex: 1 }}
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+          >
         <Camera style={styles.camera} ref={setCamera} type={CameraType.back}>
           <TouchableOpacity onPress={takePhoto} style={styles.cameraBtn}>
             <FontAwesome
@@ -97,15 +103,14 @@ export default function CreatePostsScreen({navigation}) {
             />
           </View>
         )}
-        <TouchableOpacity style={styles.uploadPhotoBtn}>
+        <TouchableOpacity style={styles.uploadPhotoBtn} onPress={sendPhoto}>
           <Text style={styles.uploadBtnText}>Upload photo</Text>
         </TouchableOpacity>
-        <View style={{...styles.postFormWrap, 
-         marginBottom: isShowKeyboard ? -50 : 111,}}>
+        <View>
           <TextInput
-            value={values.name}
+            value={name}
             onChangeText={(value) =>
-              setValues((prevState) => ({ ...prevState, name: value }))
+              setName((prevState) => ({ ...prevState, name: value }))
             }
             placeholder="Name..."
             placeholderTextColor="#BDBDBD"
@@ -119,12 +124,12 @@ export default function CreatePostsScreen({navigation}) {
           />
             <TextInput
               ref={locationRef}
-              value={values.location}
+              value={location}
               onChangeText={(value) =>
-                setValues((prevState) => ({ ...prevState, location: value }))
+                setLocation((prevState) => ({ ...prevState, location: value }))
               }
               placeholder="Location..."
-              style={{...styles.input, paddingLeft: 28, marginTop: 16, marginBottom: 32, }}
+              style={{...styles.input, paddingLeft: 28, marginTop: 16, marginBottom: 50, }}
               placeholderTextColor="#BDBDBD"
               onFocus={() => setIsShowKeyboard(true)}
               onSubmitEditing={() => {
@@ -138,12 +143,13 @@ export default function CreatePostsScreen({navigation}) {
         <TouchableOpacity style={styles.createPostBtn} onPress={handlerSubmit}>
           <Text style={styles.createPostBtnText}>Add post</Text>
         </TouchableOpacity>
-        </View>
+        </View> 
+       
         <TouchableOpacity style={styles.removePostBtn}>
         <AntDesign name="delete" size={24} color="#BDBDBD"/>
         </TouchableOpacity>  
-        </KeyboardWrapper>
-        {/* </KeyboardAvoidingView> */}
+        </KeyboardAvoidingView>
+          </TouchableWithoutFeedback>
       </View>
         </View>
   );
@@ -156,7 +162,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-
   postContainer: {
     justifyContent: "flex-end",
     width: Dimensions.get("window").width,
@@ -166,11 +171,11 @@ const styles = StyleSheet.create({
     borderColor: "#E8E8E8",
   },
   photo_preview: {
-    width: 200,
-    height: 150,
     position: "absolute",
-    top: 30,
-    left: 30,  
+    top: 75,
+    left: 70,
+    borderColor: "#fff",
+    borderWidth: 1, 
   },
   postTitle: {
     fontFamily: "Roboto-Medium",
@@ -216,6 +221,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     borderColor: "transparent",
     backgroundColor: "transparent",
+    marginBottom: 32,
   },
   camera: {
     marginTop: 32,
@@ -256,12 +262,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 100,
     borderColor: "transparent",
-    backgroundColor: "#F6F6F6",
+    backgroundColor: "#FF6C00",
+    marginBottom: 111,
   },
   createPostBtnText: {
     textAlign: "center",
     fontSize: 16,
-    color: "#BDBDBD",
+    color: "white",
     fontFamily: "Roboto-Regular",
   },
   removePostBtn: {

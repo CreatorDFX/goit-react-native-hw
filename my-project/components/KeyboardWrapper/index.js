@@ -15,7 +15,7 @@ import {
         setIsShowKeyboard(false);
       }}>
           <KeyboardAvoidingView
-            style={styles.formContainer}
+           style={styles.formContainer}
             behavior={Platform.OS == "ios" ? "padding" : "height"}
           >{children}</KeyboardAvoidingView>
           </TouchableWithoutFeedback>
