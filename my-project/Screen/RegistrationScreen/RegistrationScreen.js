@@ -51,7 +51,6 @@ const RegistrationScreen = ({navigation}) => {
     <BackgroundImage>
       <KeyboardWrapper
         setIsShowKeyboard={setIsShowKeyboard}
-        style={styles.cohttgh}
       >
         <View
           style={{
@@ -146,12 +145,7 @@ const RegistrationScreen = ({navigation}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  cohttgh: {
-    flex: 1,
-    justifyContent: "flex-end",
-
-  }, 
+const styles = StyleSheet.create({ 
   formWrap: {
     paddingTop: 92,
     backgroundColor: "#FFFFFF",

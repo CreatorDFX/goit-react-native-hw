@@ -17,6 +17,7 @@ import { useState, useRef, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from '@expo/vector-icons';
+import KeyboardWrapper from "../../components/KeyboardWrapper";
 
 const initialPostState = {
   name: "",
@@ -66,10 +67,6 @@ export default function CreatePostsScreen({navigation}) {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-        {/* <KeyboardAvoidingView
-          style={styles.mainContainer}
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
-        > */}
       <View style={styles.postContainer}>
         <Text style={styles.postTitle}>Create post</Text>
         <TouchableOpacity style={styles.arrowLeftBtn} onPress={() => navigation.navigate("Posts")}>
@@ -77,6 +74,11 @@ export default function CreatePostsScreen({navigation}) {
         </TouchableOpacity>
       </View>
       <View style={styles.container}>
+      {/* <KeyboardAvoidingView
+           style={{ flex: 1 }}
+          behavior={Platform.OS == "ios" ? "padding" : "height"}
+        > */}
+        <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard}>
         <Camera style={styles.camera} ref={setCamera} type={CameraType.back}>
           <TouchableOpacity onPress={takePhoto} style={styles.cameraBtn}>
             <FontAwesome
@@ -98,8 +100,8 @@ export default function CreatePostsScreen({navigation}) {
         <TouchableOpacity style={styles.uploadPhotoBtn}>
           <Text style={styles.uploadBtnText}>Upload photo</Text>
         </TouchableOpacity>
-
-        <View style={styles.postFormWrap}>
+        <View style={{...styles.postFormWrap, 
+         marginBottom: isShowKeyboard ? -50 : 111,}}>
           <TextInput
             value={values.name}
             onChangeText={(value) =>
@@ -109,6 +111,7 @@ export default function CreatePostsScreen({navigation}) {
             placeholderTextColor="#BDBDBD"
             style={styles.input}
             returnKeyType="next"
+            blurOnSubmit={false}
             onFocus={() => setIsShowKeyboard(true)}
             onSubmitEditing={() => {
               locationRef.current.focus();
@@ -123,6 +126,10 @@ export default function CreatePostsScreen({navigation}) {
               placeholder="Location..."
               style={{...styles.input, paddingLeft: 28, marginTop: 16, marginBottom: 32, }}
               placeholderTextColor="#BDBDBD"
+              onFocus={() => setIsShowKeyboard(true)}
+              onSubmitEditing={() => {
+                setIsShowKeyboard(false);
+              }}
             />
             <View style={styles.locationPoint}>
             <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD" />
@@ -134,9 +141,10 @@ export default function CreatePostsScreen({navigation}) {
         </View>
         <TouchableOpacity style={styles.removePostBtn}>
         <AntDesign name="delete" size={24} color="#BDBDBD"/>
-        </TouchableOpacity>
+        </TouchableOpacity>  
+        </KeyboardWrapper>
+        {/* </KeyboardAvoidingView> */}
       </View>
-      {/* </KeyboardAvoidingView> */}
         </View>
   );
 }
@@ -187,7 +195,9 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-
+  postFormWrap: {
+    marginTop: 32,
+  },
   input: {
     width: 343,
     height: 50,
@@ -202,7 +212,6 @@ const styles = StyleSheet.create({
   },
   uploadPhotoBtn: {
     height: 19,
-    marginBottom: 32,
     justifyContent: "flex-start",
     marginTop: 8,
     borderColor: "transparent",
@@ -264,6 +273,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: "transparent",
     backgroundColor: "#F6F6F6",
-    marginTop: 111,
+    left: "35%",
   },
 });
