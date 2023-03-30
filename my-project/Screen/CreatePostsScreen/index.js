@@ -8,22 +8,55 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   KeyboardAvoidingView,
+  Image,
+  Button,
 
 } from "react-native";
-import { useState, useRef } from "react";
+import { Camera, CameraType } from "expo-camera";
+import { useState, useRef, useEffect } from "react";
 import { AntDesign } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from '@expo/vector-icons';
 
 const initialPostState = {
-  photo: "",
   name: "",
   location: "",
 };
+
+
 export default function CreatePostsScreen({navigation}) {
+  const [photo, setPhoto] = useState(null);
   const [values, setValues] = useState(initialPostState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const locationRef = useRef();
+
+  const [hasPermission, setHasPermission] = useState(null);
+  const [camera, setCamera] = useState(null);
+
+  const takePhoto = async () => {
+    const photo = await camera.takePictureAsync();
+    setPhoto(photo.uri);
+    console.log("photo", photo);
+  };
+  
+
+  const [permission, requestPermission] = Camera.useCameraPermissions();
+
+  if (!permission) {
+    return <View />;
+  }
+
+
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center", marginTop: 100 }}>
+          We need your permission to show the camera
+        </Text>
+        <Button onPress={requestPermission} title="grant permission" />
+      </View>
+    );
+  }
 
   const handlerSubmit = () => {
     console.log(values);
@@ -32,32 +65,37 @@ export default function CreatePostsScreen({navigation}) {
   };
 
   return (
-    <TouchableWithoutFeedback onPress={() => {
-      Keyboard.dismiss();
-      setIsShowKeyboard(false);
-    }}>
-        <KeyboardAvoidingView
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+        {/* <KeyboardAvoidingView
           style={styles.mainContainer}
           behavior={Platform.OS == "ios" ? "padding" : "height"}
-        >
+        > */}
       <View style={styles.postContainer}>
         <Text style={styles.postTitle}>Create post</Text>
         <TouchableOpacity style={styles.arrowLeftBtn} onPress={() => navigation.navigate("Posts")}>
           <AntDesign name="arrowleft" size={24} color="#BDBDBD" />
         </TouchableOpacity>
       </View>
-      <View style={styles.uploadWrap}>
-        <View style={styles.uploadPhoto}>
-          <View style={styles.uploadIconWrap}>
+      <View style={styles.container}>
+        <Camera style={styles.camera} ref={setCamera} type={CameraType.back}>
+          <TouchableOpacity onPress={takePhoto} style={styles.cameraBtn}>
             <FontAwesome
               name="camera"
               size={24}
               color="#BDBDBD"
               style={styles.uploadIcon}
             />
+          </TouchableOpacity>
+        </Camera>
+        {photo && (
+          <View style={styles.photo_preview}>
+            <Image
+              style={{ width: 200, height: 150 }}
+              source={{ uri: photo }}
+            />
           </View>
-        </View>
-        <TouchableOpacity style={styles.uploadBtn}>
+        )}
+        <TouchableOpacity style={styles.uploadPhotoBtn}>
           <Text style={styles.uploadBtnText}>Upload photo</Text>
         </TouchableOpacity>
 
@@ -68,6 +106,7 @@ export default function CreatePostsScreen({navigation}) {
               setValues((prevState) => ({ ...prevState, name: value }))
             }
             placeholder="Name..."
+            placeholderTextColor="#BDBDBD"
             style={styles.input}
             returnKeyType="next"
             onFocus={() => setIsShowKeyboard(true)}
@@ -75,7 +114,6 @@ export default function CreatePostsScreen({navigation}) {
               locationRef.current.focus();
             }}
           />
-          <View style={{ marginTop: 16 }}>
             <TextInput
               ref={locationRef}
               value={values.location}
@@ -83,35 +121,34 @@ export default function CreatePostsScreen({navigation}) {
                 setValues((prevState) => ({ ...prevState, location: value }))
               }
               placeholder="Location..."
-              style={{...styles.input, paddingLeft: 28}}
+              style={{...styles.input, paddingLeft: 28, marginTop: 16, marginBottom: 32, }}
+              placeholderTextColor="#BDBDBD"
             />
             <View style={styles.locationPoint}>
             <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD" />
-            </View>
           </View>
-        </View>
+        
         <TouchableOpacity style={styles.createPostBtn} onPress={handlerSubmit}>
           <Text style={styles.createPostBtnText}>Add post</Text>
         </TouchableOpacity>
+        </View>
         <TouchableOpacity style={styles.removePostBtn}>
         <AntDesign name="delete" size={24} color="#BDBDBD"/>
         </TouchableOpacity>
       </View>
-      </KeyboardAvoidingView>
-        </TouchableWithoutFeedback>
+      {/* </KeyboardAvoidingView> */}
+        </View>
   );
 }
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  container: {
     flex: 1,
     backgroundColor: "white",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  uploadWrap: {
-    paddingTop: 32,
-    paddingLeft: 16,
-    paddingRight: 16,
-  },
+
   postContainer: {
     justifyContent: "flex-end",
     width: Dimensions.get("window").width,
@@ -119,6 +156,13 @@ const styles = StyleSheet.create({
     padding: 11,
     borderWidth: 1,
     borderColor: "#E8E8E8",
+  },
+  photo_preview: {
+    width: 200,
+    height: 150,
+    position: "absolute",
+    top: 30,
+    left: 30,  
   },
   postTitle: {
     fontFamily: "Roboto-Medium",
@@ -134,12 +178,16 @@ const styles = StyleSheet.create({
     left: 0,
     top: 42,
   },
-  postFormWrap: {
-    flex: 1,
-    justifyContent: "flex-start",
-    width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height,
+  cameraBtn: {
+    marginBottom: 10,
+    borderRadius: 30,
+    backgroundColor: "#ffffff77",
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
   },
+
   input: {
     width: 343,
     height: 50,
@@ -148,21 +196,25 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     fontSize: 16,
     lineHeight: 19,
+    fontFamily: "Roboto-Regular",
+    color: '#212121',
+    lineHeight: 19,
   },
-  uploadBtn: {
+  uploadPhotoBtn: {
     height: 19,
     marginBottom: 32,
     justifyContent: "flex-start",
     marginTop: 8,
     borderColor: "transparent",
-    backgroundColor: "white",
+    backgroundColor: "transparent",
   },
-  uploadPhoto: {
+  camera: {
+    marginTop: 32,
+    width: 343,
     height: 240,
-    backgroundColor: "#F6F6F6",
-    borderWidth: 1,
-    borderRadius: 8,
-    borderColor: "#E8E8E8",
+    justifyContent: 'center',
+    alignItems: 'center',
+
   },
   uploadIconWrap: {
     flex: 1,
@@ -185,18 +237,17 @@ const styles = StyleSheet.create({
   },
   locationPoint: {
     position: "absolute",
-    top: 12,
+    top: 76,
     left: 0,
   },
   createPostBtn: {
     height: 51,
+    width: 343,
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 100,
     borderColor: "transparent",
     backgroundColor: "#F6F6F6",
-    marginTop: 150,
-    marginBottom: 120,
   },
   createPostBtnText: {
     textAlign: "center",
@@ -213,8 +264,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     borderColor: "transparent",
     backgroundColor: "#F6F6F6",
-    position: 'absolute',
-    bottom: 0,
-    left: "45%",
+    marginTop: 111,
   },
 });
