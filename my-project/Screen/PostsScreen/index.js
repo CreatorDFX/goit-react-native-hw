@@ -12,7 +12,7 @@ import { useState, useEffect } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 
-export default function PostsScreen({ navigation, route }) {
+export default function PostsScreen({ navigation, route, location }) {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -48,7 +48,7 @@ export default function PostsScreen({ navigation, route }) {
                   size={24}
                   color="#BDBDBD"
                 />
-                <Text style={styles.locationText}>Volyn region, Ukraine</Text>
+                <Text style={styles.locationText}>{location}</Text>
               </TouchableOpacity>
             </View>
           </View>

@@ -9,7 +9,7 @@ import {
   Button,
 } from "react-native";
 import { Camera, CameraType } from "expo-camera";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect} from "react";
 import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
@@ -17,7 +17,7 @@ import KeyboardWrapper from "../../components/KeyboardWrapper";
 export default function CreatePostsScreen({ navigation }) {
   const [photo, setPhoto] = useState(null);
   const [name, setName] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState('');
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const locationRef = useRef();
   const [camera, setCamera] = useState(null);
@@ -25,6 +25,7 @@ export default function CreatePostsScreen({ navigation }) {
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
     setPhoto(photo.uri);
+    console.log("photo", photo);
   };
 
   const [permission, requestPermission] = Camera.useCameraPermissions();
@@ -70,7 +71,7 @@ export default function CreatePostsScreen({ navigation }) {
           </TouchableOpacity>
         </Camera>
         {photo && (
-          <View style={styles.photo_preview}>
+          <View style={styles.photoPreview}>
             <Image
               style={{ width: 200, height: 150 }}
               source={{ uri: photo }}
@@ -109,8 +110,8 @@ export default function CreatePostsScreen({ navigation }) {
           style={{
             ...styles.input,
             paddingLeft: 28,
-            marginTop: 16,
-            marginBottom: 32,
+            marginTop: 18,
+            marginBottom: 42,
           }}
           placeholderTextColor="#BDBDBD"
           onFocus={() => setIsShowKeyboard(true)}
@@ -137,7 +138,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
-  photo_preview: {
+  photoPreview: {
     position: "absolute",
     top: 75,
     left: 70,
@@ -146,7 +147,7 @@ const styles = StyleSheet.create({
   },
   formWrap: {
     paddingBottom: 111,
-    paddingTop: 32,
+  
   },
   cameraBtn: {
     marginBottom: 10,
@@ -175,8 +176,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
     borderColor: "transparent",
     backgroundColor: "transparent",
+    marginBottom: 32,
   },
   camera: {
+    marginTop: 36,
     width: 343,
     height: 240,
     justifyContent: "center",
@@ -190,7 +193,7 @@ const styles = StyleSheet.create({
   },
   locationPoint: {
     position: "absolute",
-    top: 110,
+    top: 80,
     left: 0,
   },
   createPostBtn: {
