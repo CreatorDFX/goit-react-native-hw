@@ -17,10 +17,11 @@ import KeyboardWrapper from "../../components/KeyboardWrapper";
 export default function CreatePostsScreen({ navigation }) {
   const [photo, setPhoto] = useState(null);
   const [name, setName] = useState("");
-  const [location, setLocation] = useState('');
+  const [locationPlace, setLocationPlace] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const locationRef = useRef();
+  const locationPlaceRef = useRef();
   const [camera, setCamera] = useState(null);
+  
 
   const takePhoto = async () => {
     const photo = await camera.takePictureAsync();
@@ -43,17 +44,18 @@ export default function CreatePostsScreen({ navigation }) {
   }
 
   const handlerSubmit = () => {
-    console.log(name, location, photo);
+    console.log(name, locationPlace, photo);
     Keyboard.dismiss();
-    setLocation("");
+    setLocationPlace("");
     setName("");
     setPhoto("");
     sendPhoto();
   };
 
   const sendPhoto = () => {
-    navigation.navigate("Posts", { photo });
+    navigation.navigate("DefaultScreen", { photo });
   };
+
 
   return (
     <View style={styles.container}>
@@ -98,12 +100,12 @@ export default function CreatePostsScreen({ navigation }) {
           }}
         />
         <TextInput
-          ref={locationRef}
-          value={location}
+          ref={locationPlaceRef}
+          value={locationPlace}
           onChangeText={(value) =>
             setLocation((prevState) => ({
               ...prevState,
-              location: value,
+              locationPlace: value,
             }))
           }
           placeholder="Location..."
