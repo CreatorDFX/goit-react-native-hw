@@ -51,6 +51,7 @@ const RegistrationScreen = ({navigation}) => {
     <BackgroundImage>
       <KeyboardWrapper
         setIsShowKeyboard={setIsShowKeyboard}
+        style={{ justifyContent: "flex-end"}}
       >
         <View
           style={{

@@ -6,64 +6,84 @@ import CreatePostsScreen from "../CreatePostsScreen";
 import ProfileScreen from "../ProfileScreen";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import LogoutBtn from "../../components/LogoutButton/LogoutBtn";
+import GoToBackBtn from "../../components/GoToBackButton/GoToBackBtn";
 
 const MainTabs = createBottomTabNavigator();
 
 const Home = () => {
   return (
     <MainTabs.Navigator
-    screenOptions={{
-      tabBarStyle: {height: 83, paddingHorizontal: 82, paddingBottom: 22},
-    }}
-    
+      screenOptions={{
+        tabBarStyle: { height: 83, paddingHorizontal: 82, paddingBottom: 22 },
+        headerStyle: {
+          borderWidth: 1,
+          borderColor: "#BDBDBD",
+        },
+        headerTitleStyle: {
+          fontWeight: "500",
+          fontSize: 17,
+          color: "#212121",
+        },
+        headerTitleAlign: "center",
+      }
+      }
     >
       <MainTabs.Screen
-        options={{
+        name="Posts"
+        component={PostsScreen}
+        options={({ navigation }) => ({
+          headerTitle: "Posts",
+          headerRight: (props) => (
+            <LogoutBtn navigation={navigation} {...props} />
+          ),
           tabBarIcon: () => (
             <SimpleLineIcons name="grid" size={28} color="#bdbdbd" />
           ),
-          headerShown: false,
           tabBarShowLabel: false,
-        }}
-        
-        name="Posts"
-        component={PostsScreen}
+        })}
       />
       <MainTabs.Screen
-        options={{
+        name="Create"
+        component={CreatePostsScreen}
+        options={({ navigation }) => ({
           tabBarStyle: {
             display: "none",
           },
+          headerTitle: "Create posts",
+          headerLeft: (props) => (
+            <GoToBackBtn navigation={navigation} {...props} />
+          ),
           tabBarIcon: () => (
             <View style={styles.createPostButton}>
               <Feather name="plus" size={18} color="white" />
             </View>
           ),
           tabBarShowLabel: false,
-          headerShown: false,
-        }}
-        name="Create"
-        component={CreatePostsScreen}
+        })}
         listeners={({ navigation, route }) => ({
           tabPress: (e) => {
             e.preventDefault();
             navigation.navigate("Create");
           },
-          navigationOptions:()=>{
+          navigationOptions: () => {
             return {
-              tabBarVisible:false,
+              tabBarVisible: false,
             };
-         }
+          },
         })}
       />
       <MainTabs.Screen
+        name="Profile"
+        component={ProfileScreen}
         options={{
-          tabBarIcon: () => <Feather name="user" size={28} color="#bdbdbd" />,
+          headerTitle: "Profile",
+          tabBarIcon: () => (
+            <Feather name="user" size={28} color="#bdbdbd" />
+          ),
           tabBarShowLabel: false,
           headerShown: false,
         }}
-        name="Profile"
-        component={ProfileScreen}
       />
     </MainTabs.Navigator>
   );
@@ -79,6 +99,5 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
 });
-
 
 export default Home;

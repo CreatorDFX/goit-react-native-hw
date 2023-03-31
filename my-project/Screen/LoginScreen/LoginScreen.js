@@ -11,7 +11,6 @@ import {
 
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
-
 import BackgroundImage from "../../components/BackgroundImg";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
 import PrimaryButton from "../../components/PrimaryButton";
@@ -21,8 +20,7 @@ const initialFormState = {
   password: "",
 };
 
-const LoginScreen = ({navigation}) => {
-
+const LoginScreen = ({ navigation }) => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(true);
@@ -51,7 +49,10 @@ const LoginScreen = ({navigation}) => {
   };
   return (
     <BackgroundImage>
-      <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard}>
+      <KeyboardWrapper
+        setIsShowKeyboard={setIsShowKeyboard}
+        style={{ justifyContent: "flex-end" }}
+      >
         <View
           style={{
             ...styles.formWrap,
@@ -106,7 +107,7 @@ const LoginScreen = ({navigation}) => {
                 />
               </Pressable>
             </View>
-            <PrimaryButton onPress={handlerSubmit} title={"Login"}/>
+            <PrimaryButton onPress={handlerSubmit} title={"Login"} />
             <Text
               onPress={() => navigation.navigate("Register")}
               style={styles.text}

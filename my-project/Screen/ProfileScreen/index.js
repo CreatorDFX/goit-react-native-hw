@@ -10,6 +10,7 @@ import { Feather } from "@expo/vector-icons";
 import BackgroundImage from "../../components/BackgroundImg";
 import { AntDesign } from '@expo/vector-icons'; 
 import { Octicons } from '@expo/vector-icons'; 
+import LogoutBtn from "../../components/LogoutButton/LogoutBtn";
 
 
 const ProfileScreen = ({navigation}) => {
@@ -23,13 +24,7 @@ const ProfileScreen = ({navigation}) => {
             </View>
           </View>
            <Text style={styles.userName}>Natali Romanova</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("Register")} style={styles.logoutBtn}>
-          <Feather
-            name="log-out"
-            size={24}
-            color="#BDBDBD"
-          />
-        </TouchableOpacity>
+         <LogoutBtn navigation={navigation}/>
         </View>
     </View>
   );
@@ -57,7 +52,7 @@ const styles = StyleSheet.create({
   addBtn: {
     position: "absolute",
     left: 108,
-    top: 84,
+    top: 74,
   },
   userName: {
     textAlign: "center",
@@ -65,11 +60,6 @@ const styles = StyleSheet.create({
     color: "#212121",
     marginVertical: 32,
     fontFamily: "Roboto-Medium",
-  },
-  logoutBtn: {
-    position: 'absolute',
-    right: 15, 
-    top: 15,
   },
 });
 
