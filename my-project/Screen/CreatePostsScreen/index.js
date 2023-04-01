@@ -17,9 +17,9 @@ import KeyboardWrapper from "../../components/KeyboardWrapper";
 export default function CreatePostsScreen({ navigation }) {
   const [photo, setPhoto] = useState(null);
   const [name, setName] = useState("");
-  const [locationPlace, setLocationPlace] = useState(null);
+  const [location, setLocation] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const locationPlaceRef = useRef();
+  const locationRef = useRef();
   const [camera, setCamera] = useState(null);
   
 
@@ -44,16 +44,16 @@ export default function CreatePostsScreen({ navigation }) {
   }
 
   const handlerSubmit = () => {
-    console.log(name, locationPlace, photo);
+    console.log(name, location, photo);
     Keyboard.dismiss();
-    setLocationPlace("");
+    setLocation("");
     setName("");
     setPhoto("");
     sendPhoto();
   };
 
   const sendPhoto = () => {
-    navigation.navigate("DefaultScreen", { photo });
+    navigation.navigate("Posts", { photo });
   };
 
 
@@ -100,12 +100,12 @@ export default function CreatePostsScreen({ navigation }) {
           }}
         />
         <TextInput
-          ref={locationPlaceRef}
-          value={locationPlace}
+          ref={locationRef}
+          value={location}
           onChangeText={(value) =>
             setLocation((prevState) => ({
               ...prevState,
-              locationPlace: value,
+              location: value,
             }))
           }
           placeholder="Location..."
@@ -122,7 +122,7 @@ export default function CreatePostsScreen({ navigation }) {
           }}
         />
         <View style={styles.locationPoint}>
-          <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD" />
+          <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD" onPress={() => navigation.navigate("Map", {location})} />
         </View>
         <TouchableOpacity style={styles.createPostBtn} onPress={handlerSubmit}>
           <Text style={styles.createPostBtnText}>Add post</Text>

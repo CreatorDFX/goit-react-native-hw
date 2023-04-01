@@ -6,7 +6,7 @@ export default function GoToBackBtn({ navigation, style, ...props }) {
   return (
     <TouchableOpacity
       style={styles.arrowLeftBtn}
-      onPress={() => navigation.navigate("Posts")}
+      onPress={() => navigation.goBack()}
       {...props}
     >
       <AntDesign name="arrowleft" size={24} color="#E8E8E8" />
