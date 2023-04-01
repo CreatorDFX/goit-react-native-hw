@@ -49,11 +49,13 @@ export default function CreatePostsScreen({ navigation }) {
     setLocation("");
     setName("");
     setPhoto("");
-    sendPhoto();
+    navigation.navigate("Posts", {photo});
+    
   };
 
   const sendPhoto = () => {
-    navigation.navigate("Posts", { photo });
+    setPhoto(photo.uri)
+     
   };
 
 
@@ -62,6 +64,7 @@ export default function CreatePostsScreen({ navigation }) {
        <KeyboardWrapper
         setIsShowKeyboard={setIsShowKeyboard} 
       >
+        <View style={{overflow: 'hidden', borderRadius: 8, marginTop: 36 }}>
         <Camera style={styles.camera} ref={setCamera} type={CameraType.back}>
           <TouchableOpacity onPress={takePhoto} style={styles.cameraBtn}>
             <FontAwesome
@@ -72,16 +75,21 @@ export default function CreatePostsScreen({ navigation }) {
             />
           </TouchableOpacity>
         </Camera>
+        </View>
         {photo && (
           <View style={styles.photoPreview}>
             <Image
-              style={{ width: 200, height: 150 }}
+              style={{ width: 343, height: 240 }}
               source={{ uri: photo }}
             />
-          </View>
+          </View> 
         )}
-        <TouchableOpacity style={styles.uploadPhotoBtn}>
-          <Text style={styles.uploadBtnText}>Upload photo</Text>
+        <TouchableOpacity style={styles.uploadPhotoBtn} onPress={sendPhoto}>
+          {photo ? (<Text style={styles.uploadBtnText}>Edit photo</Text>
+          ):(
+            <Text style={styles.uploadBtnText}> Upload photo</Text>
+          )}
+       
         </TouchableOpacity>
         <View style={styles.formWrap}>
         <TextInput
@@ -122,7 +130,7 @@ export default function CreatePostsScreen({ navigation }) {
           }}
         />
         <View style={styles.locationPoint}>
-          <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD" onPress={() => navigation.navigate("Map", {location: location})} />
+          <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD"  />
         </View>
         <TouchableOpacity style={styles.createPostBtn} onPress={handlerSubmit}>
           <Text style={styles.createPostBtnText}>Add post</Text>
@@ -142,10 +150,12 @@ const styles = StyleSheet.create({
   },
   photoPreview: {
     position: "absolute",
-    top: 75,
-    left: 70,
+    top: 34,
+    left: 0,
     borderColor: "#fff",
     borderWidth: 1,
+    overflow: 'hidden', 
+    borderRadius: 8
   },
   formWrap: {
     paddingBottom: 111,
@@ -181,7 +191,6 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   camera: {
-    marginTop: 36,
     width: 343,
     height: 240,
     justifyContent: "center",
