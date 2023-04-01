@@ -67,7 +67,7 @@ export default function DefaultPostScreen({ navigation, route}) {
 
               <TouchableOpacity
                 style={{ flexDirection: "row", alignItems: "baseline" }}
-                onPress={() => navigation.navigate("Map", {location})}
+                onPress={() => navigation.navigate("Map", {location: item.location})}
               >
                 <SimpleLineIcons
                   name="location-pin"
