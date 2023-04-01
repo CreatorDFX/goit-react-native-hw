@@ -1,10 +1,7 @@
-
 import {
   View,
   StyleSheet,
-  TouchableOpacity, 
   Text,
-  Dimensions,
 } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import BackgroundImage from "../../components/BackgroundImg";

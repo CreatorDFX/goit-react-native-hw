@@ -1,30 +1,3 @@
-
-// import React from "react";
-// import { createStackNavigator } from "@react-navigation/stack";
-// import DefaultPostScreen from "../DefaultPostScreen/DefaultPostScreen";
-// import MapScreen from "../MapScreen/MapScreen";
-// import CommentsScreen from "../CommentsScreen/CommentsScreen";
-
-// import GoToBackBtn from "../../components/GoToBackButton/GoToBackBtn";
-
-// const NestedScreen = createStackNavigator();
-
-// export default function PostsScreen() {
-//   return (
-//     <NestedScreen.Navigator screenOptions={{ headerShown: false, }}>
-//       <NestedScreen.Screen name="DefaultScreen" component={DefaultPostScreen}   />
-//       <NestedScreen.Screen name="map" component={MapScreen} />
-//       <NestedScreen.Screen name="comments" component={CommentsScreen} options={({ navigation }) => ({
-//                 headerTitle: 'Comments',
-//                 headerBackVisible: false,
-//                 headerLeft: (props) => (
-//                   <GoToBackBtn navigation={navigation} {...props} />
-//                 ),
-//               })}/>
-//     </NestedScreen.Navigator>
-//   );
-// }
-
 import {
   Text,
   View,
