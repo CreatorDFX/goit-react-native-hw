@@ -2,7 +2,11 @@ import { View } from "react-native";
 import { useFonts } from "expo-font";
 import * as SplashScreen from "expo-splash-screen";
 import { useCallback } from "react";
-import Router from "./components/Router";
+import useRoute from "./helpers/route";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
+import { NavigationContainer } from "@react-navigation/native";
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -21,10 +25,15 @@ export default function App() {
   if (!fontsLoaded) {
     return null;
   }
+ 
 
-  return (
+  const routing = useRoute();
+
+  return ( 
+  <Provider store={store}>
     <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-      <Router/>
-    </View>
+      <NavigationContainer>{routing}</NavigationContainer>
+    </View> 
+    </Provider>
   );
 }

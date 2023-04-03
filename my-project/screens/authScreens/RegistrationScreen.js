@@ -14,10 +14,12 @@ import { Ionicons } from '@expo/vector-icons';
 import BackgroundImage from "../../components/BackgroundImg";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
 import PrimaryButton from "../../components/PrimaryButton";
+import { register } from "../../redux/auth/authOperations";
+import { useDispatch } from "react-redux";
 
 
 const initialFormState = {
-  login: "",
+  name: "",
   email: "",
   password: "",
 };
@@ -30,11 +32,13 @@ const RegistrationScreen = ({navigation}) => {
   const passwordRef = useRef();
   const emailRef = useRef();
 
+  const dispatch = useDispatch();
+
   const handlerSubmit = () => {
-    console.log(values);
     Keyboard.dismiss();
     setValues(initialFormState);
-    navigation.navigate("Home");
+    dispatch(register(values));
+   
   };
 
   const handlePasswordVisibility = () => {
@@ -73,9 +77,9 @@ const RegistrationScreen = ({navigation}) => {
           </View>
           <View>
             <TextInput
-              value={values.login}
+              value={values.name}
               onChangeText={(value) =>
-                setValues((prevState) => ({ ...prevState, login: value }))
+                setValues((prevState) => ({ ...prevState, name: value }))
               }
               placeholder="Login"
               style={styles.input}

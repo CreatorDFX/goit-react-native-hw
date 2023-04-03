@@ -1,18 +1,25 @@
-import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import RegistrationScreen from "../../screens/authScreens/RegistrationScreen";
-import LoginScreen from "../../screens/authScreens/LoginScreen";
-import Home from "../../screens/mainScreens/Home";
-import CommentsScreen from "../../screens/mainScreens/CommentsScreen";
-import GoToBackBtn from "../GoToBackButton/GoToBackBtn";
-import MapScreen from "../../screens/mainScreens/MapScreen";
+import RegistrationScreen from "../screens/authScreens/RegistrationScreen";
+import LoginScreen from "../screens/authScreens/LoginScreen";
+import Home from "../screens/mainScreens/Home";
+import CommentsScreen from "../screens/mainScreens/CommentsScreen";
+import GoToBackBtn from "../components/GoToBackButton/GoToBackBtn";
+import MapScreen from "../screens/mainScreens/MapScreen";
+
 
 const MainStack = createStackNavigator();
+const AuthStack = createStackNavigator();
 
-export default function Router() {
-  
+export default function useRoute (isAuth) {
+  if (!isAuth) {
+    return (
+      <AuthStack.Navigator>
+        <AuthStack.Screen  name="Register" component={RegistrationScreen} options={{headerShown: false}} />
+          <AuthStack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}  />
+         </AuthStack.Navigator>
+         );
+    }
   return (
-      <NavigationContainer>
         <MainStack.Navigator
           screenOptions={{
             headerStyle: {
@@ -27,8 +34,6 @@ export default function Router() {
             headerTitleAlign: "center",
           }}
         >
-          <MainStack.Screen   name="Register" component={RegistrationScreen} options={{headerShown: false}} />
-          <MainStack.Screen name="Login" component={LoginScreen} options={{headerShown: false}}  />
           <MainStack.Screen name="Home" component={Home} options={{headerShown: false}}/>
           <MainStack.Screen
             name="Comments"
@@ -53,6 +58,5 @@ export default function Router() {
             })}
           />
         </MainStack.Navigator>
-      </NavigationContainer>
   );
 }
