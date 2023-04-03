@@ -132,7 +132,7 @@ export default function CreatePostsScreen({ navigation }) {
         <View style={styles.locationPoint}>
           <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD"  />
         </View>
-        <TouchableOpacity style={styles.createPostBtn} onPress={handlerSubmit}>
+        <TouchableOpacity style={styles.createPostBtn} disabled={!photo} onPress={handlerSubmit}>
           <Text style={styles.createPostBtnText}>Add post</Text>
         </TouchableOpacity>
       </View>

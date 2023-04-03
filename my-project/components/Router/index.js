@@ -1,11 +1,11 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import RegistrationScreen from "../../Screen/RegistrationScreen/RegistrationScreen";
-import LoginScreen from "../../Screen/LoginScreen/LoginScreen";
-import Home from "../../Screen/Home/Home";
-import CommentsScreen from "../../Screen/CommentsScreen/CommentsScreen";
+import RegistrationScreen from "../../screens/authScreens/RegistrationScreen";
+import LoginScreen from "../../screens/authScreens/LoginScreen";
+import Home from "../../screens/mainScreens/Home";
+import CommentsScreen from "../../screens/mainScreens/CommentsScreen";
 import GoToBackBtn from "../GoToBackButton/GoToBackBtn";
-import MapScreen from "../../Screen/MapScreen/MapScreen";
+import MapScreen from "../../screens/mainScreens/MapScreen";
 
 const MainStack = createStackNavigator();
 
