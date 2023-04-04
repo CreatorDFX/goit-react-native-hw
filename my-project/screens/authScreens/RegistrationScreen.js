@@ -7,11 +7,13 @@ import {
   View,
   Dimensions,
   Pressable,
+  TouchableOpacity,
+  Alert
 } from "react-native";
-import ToastManager, { Toast } from 'toastify-react-native'
+import * as ImagePicker from 'expo-image-picker';
+import firebase from "../../firebase/config";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from '@expo/vector-icons'; 
-
 import BackgroundImage from "../../components/BackgroundImg";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
 import PrimaryButton from "../../components/PrimaryButton";
@@ -29,6 +31,7 @@ const RegistrationScreen = ({navigation}) => {
   const [values, setValues] = useState(initialFormState);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const [passwordVisibility, setPasswordVisibility] = useState(true);
+  const [image, setImage] = useState(null);
   const [rightIcon, setRightIcon] = useState("eye");
   const passwordRef = useRef();
   const emailRef = useRef();
@@ -36,16 +39,38 @@ const RegistrationScreen = ({navigation}) => {
   const dispatch = useDispatch();
 
   const handlerSubmit = () => {
-
     if(values.email === '' || values.name === ''|| values.password === '') {
-      Toast.error('All fields are required')
+      Alert.alert('All fields are required')
     }
-
     Keyboard.dismiss();
-    setValues(initialFormState);
-    dispatch(registerUser(values));
-    
-   
+    dispatch(registerUser({ ...values, image }));
+  };
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImage(result.assets[0].uri);
+      uploadProfileImage(result.assets[0].uri);
+    }
+  };
+
+  const uploadProfileImage = async (img) => {
+    const response = await fetch(img);
+    const file = await response.blob();
+    const uniquePostId = Date.now().toString();
+    await firebase.storage().ref(`profileImg/${uniquePostId}`).put(file);
+    const processedPhoto = await firebase
+      .storage()
+      .ref("profileImg")
+      .child(uniquePostId)
+      .getDownloadURL();
+    setImage(processedPhoto);
   };
 
   const handlePasswordVisibility = () => {
@@ -60,7 +85,6 @@ const RegistrationScreen = ({navigation}) => {
 
   return (
     <BackgroundImage>
-      <ToastManager/>
       <KeyboardWrapper
         setIsShowKeyboard={setIsShowKeyboard}
         style={{ justifyContent: "flex-end"}}
@@ -74,14 +98,14 @@ const RegistrationScreen = ({navigation}) => {
         >
           <Text style={styles.formTitle}>Registration</Text>
           <View style={styles.avatarWrap}>
-            <View style={styles.avatar}>
+            <TouchableOpacity style={styles.avatar} onPress={pickImage}>
               <Ionicons
                 name="add-circle-outline"
                 size={25}
                 color="#FF6C00"
                 style={styles.addBtn}
               />
-            </View>
+            </TouchableOpacity>
           </View>
           <View>
             <TextInput

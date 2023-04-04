@@ -9,7 +9,6 @@ import {
   Pressable,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import ToastManager, { Toast } from 'toastify-react-native'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BackgroundImage from "../../components/BackgroundImg";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
@@ -32,9 +31,6 @@ const LoginScreen = ({ navigation }) => {
 
 
   const handlerSubmit = () => {
-    if(values.email === '' || values.password === '') {
-      Toast.error('All fields are required')
-    }
     console.log(values)
     Keyboard.dismiss();
     dispatch(loginUser(values));
@@ -52,7 +48,6 @@ const LoginScreen = ({ navigation }) => {
   };
   return (
     <BackgroundImage>
-       <ToastManager />
       <KeyboardWrapper
         setIsShowKeyboard={setIsShowKeyboard}
         style={{ justifyContent: "flex-end" }}

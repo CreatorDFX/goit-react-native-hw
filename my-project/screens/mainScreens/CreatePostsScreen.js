@@ -8,11 +8,14 @@ import {
   Image,
   Button,
 } from "react-native";
+import firebase from '../../firebase/config'
 import { Camera, CameraType } from "expo-camera";
-import { useState, useRef, useEffect} from "react";
+import { useState, useRef} from "react";
+import { useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
+import  { selectUserId, selectUserName } from '../../redux/auth/authSelectors'
 
 export default function CreatePostsScreen({ navigation }) {
   const [photo, setPhoto] = useState(null);
@@ -21,14 +24,10 @@ export default function CreatePostsScreen({ navigation }) {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const locationRef = useRef();
   const [camera, setCamera] = useState(null);
+
+  const username = useSelector(selectUserName);
+  const userId = useSelector(selectUserId);
   
-
-  const takePhoto = async () => {
-    const photo = await camera.takePictureAsync();
-    setPhoto(photo.uri);
-    console.log("photo", photo);
-  };
-
   const [permission, requestPermission] = Camera.useCameraPermissions();
   if (!permission) {
     return <View />;
@@ -43,21 +42,55 @@ export default function CreatePostsScreen({ navigation }) {
     );
   }
 
-  const handlerSubmit = () => {
-    console.log(name, location, photo);
-    Keyboard.dismiss();
-    setLocation("");
-    setName("");
-    setPhoto("");
-    navigation.navigate("Posts", {photo});
-    
-  };
 
   const sendPhoto = () => {
     setPhoto(photo.uri)
-     
   };
 
+  const takePhoto = async () => {
+    const photo = await camera.takePictureAsync();
+    setPhoto(photo.uri);
+  };
+
+
+  const handlerSubmit = async () => {
+    try {
+      await preparePost();
+      navigation.navigate("Posts");
+      setPhoto(null);
+      setLocation("");
+      setName("");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
+
+  const uploadPhotoToServer = async () => {
+    const res = await fetch(photo);
+    const file = await res.blob();
+
+    const uniquePostId = Date.now().toString();
+
+    await firebase.storage().ref(`postImage/${uniquePostId}`).put(file);
+
+    const processedPhoto = await firebase
+      .storage()
+      .ref("postImage")
+      .child(uniquePostId)
+      .getDownloadURL();
+    return processedPhoto;
+  };
+
+  const preparePost = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await firebase.firestore().collection("Posts").add({
+      photo,
+      name,
+      location,
+      userId,
+      username,
+    });
+  };
 
   return (
     <View style={styles.container}>

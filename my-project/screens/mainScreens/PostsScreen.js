@@ -6,34 +6,40 @@ import {
   FlatList,
   Image,
 } from "react-native";
-
 import { useState, useEffect } from "react";
 import { EvilIcons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import firebase from '../../firebase/config'
 
-export default function DefaultPostScreen({ navigation, route}) {
+export default function DefaultPostScreen({ navigation}) {
   const [posts, setPosts] = useState([]);
 
+  const getAllPost = async () => {
+    await firebase
+      .firestore()
+      .collection("Posts")
+      .onSnapshot((data) =>
+        setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
+    console.log("Posts", posts);
+  };
+
   useEffect(() => {
-    if (route.params) {
-      setPosts((prevState) => [...prevState, route.params]);
-    }
-  }, [route.params]);
-  console.log(posts)
- 
+    getAllPost();
+  }, []);
 
   return (
     <View style={styles.mainContainer}>
       <FlatList
         data={posts}
-        keyExtractor={(item, indx) => indx.toString()}
+        keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={{ marginBottom: 32 }}>
             <Image
               source={{ uri: item.photo }}
               style={{ width: 343, height: 240, borderRadius: 8, overflow: 'hidden' }}
             />
-            <Text style={styles.postsNameDescription}></Text>
+            <Text style={styles.postsNameDescription}>{item.name}</Text>
             <View style={styles.wrapper}>
               <TouchableOpacity onPress={() => navigation.navigate("Comments", { postId: item.id })}>
                 <EvilIcons name="comment" size={30} color="black" />

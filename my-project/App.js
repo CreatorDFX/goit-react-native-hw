@@ -5,7 +5,8 @@ import { useCallback } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import Main from "./components/Main";
-
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Warning: Async Storage has been extracted from react-native core']);
 
 SplashScreen.preventAutoHideAsync();
 

@@ -12,7 +12,8 @@ export const registerUser = createAsyncThunk(
       const user = await firebase.auth().currentUser;
       await user.updateProfile({
         displayName: name,
-        photoURL: image,    
+        photoURL: image,
+        
       });
 
       const { displayName, uid } = await firebase.auth().currentUser;
@@ -55,6 +56,7 @@ export const authStateChangeUser = () => async (dispatch, getState) => {
         userId: user.uid,
         profileImg: user.photoURL,
       };
+
       dispatch(updateUserProfile(userUpdateProfile));
     }
     dispatch(setIsRefreshing(false));
