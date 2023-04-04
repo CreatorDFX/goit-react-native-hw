@@ -8,12 +8,13 @@ import {
   Dimensions,
   Pressable,
 } from "react-native";
-
+import { useDispatch } from "react-redux";
+import ToastManager, { Toast } from 'toastify-react-native'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-
 import BackgroundImage from "../../components/BackgroundImg";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
 import PrimaryButton from "../../components/PrimaryButton";
+import { loginUser } from "../../redux/auth/authOperations";
 
 const initialFormState = {
   email: "",
@@ -26,16 +27,18 @@ const LoginScreen = ({ navigation }) => {
   const [passwordVisibility, setPasswordVisibility] = useState(true);
   const [rightIcon, setRightIcon] = useState("eye");
   const passwordRef = useRef();
-  const keyboardHide = () => {
-    Keyboard.dismiss();
-    setIsShowKeyboard(false);
-  };
+
+  const dispatch = useDispatch();
+
 
   const handlerSubmit = () => {
-    console.log(values);
+    if(values.email === '' || values.password === '') {
+      Toast.error('All fields are required')
+    }
+    console.log(values)
     Keyboard.dismiss();
-    setValues(initialFormState);
-    navigation.navigate("Home");
+    dispatch(loginUser(values));
+    
   };
 
   const handlePasswordVisibility = () => {
@@ -49,6 +52,7 @@ const LoginScreen = ({ navigation }) => {
   };
   return (
     <BackgroundImage>
+       <ToastManager />
       <KeyboardWrapper
         setIsShowKeyboard={setIsShowKeyboard}
         style={{ justifyContent: "flex-end" }}

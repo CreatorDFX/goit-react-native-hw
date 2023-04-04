@@ -1,16 +1,16 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import RegistrationScreen from "../screens/authScreens/RegistrationScreen";
-import LoginScreen from "../screens/authScreens/LoginScreen";
-import Home from "../screens/mainScreens/Home";
-import CommentsScreen from "../screens/mainScreens/CommentsScreen";
-import GoToBackBtn from "../components/GoToBackButton/GoToBackBtn";
-import MapScreen from "../screens/mainScreens/MapScreen";
+import RegistrationScreen from "../../screens/authScreens/RegistrationScreen";
+import LoginScreen from "../../screens/authScreens/LoginScreen";
+import Home from "../../screens/mainScreens/Home";
+import CommentsScreen from "../../screens/mainScreens/CommentsScreen";
+import GoToBackBtn from "../GoToBackButton/GoToBackBtn";
+import MapScreen from "../../screens/mainScreens/MapScreen";
 
 
 const MainStack = createStackNavigator();
 const AuthStack = createStackNavigator();
 
-export default function useRoute (isAuth) {
+export default function Router (isAuth) {
   if (!isAuth) {
     return (
       <AuthStack.Navigator>
