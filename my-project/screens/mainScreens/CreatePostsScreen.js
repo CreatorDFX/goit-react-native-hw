@@ -8,14 +8,14 @@ import {
   Image,
   Button,
 } from "react-native";
-import firebase from '../../firebase/config'
+import firebase from "../../firebase/config";
 import { Camera, CameraType } from "expo-camera";
-import { useState, useRef} from "react";
+import { useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import { FontAwesome } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
-import  { selectUserId, selectUserName } from '../../redux/auth/authSelectors'
+import { selectUserId, selectUserName } from "../../redux/auth/authSelectors";
 
 export default function CreatePostsScreen({ navigation }) {
   const [photo, setPhoto] = useState(null);
@@ -27,7 +27,7 @@ export default function CreatePostsScreen({ navigation }) {
 
   const username = useSelector(selectUserName);
   const userId = useSelector(selectUserId);
-  
+
   const [permission, requestPermission] = Camera.useCameraPermissions();
   if (!permission) {
     return <View />;
@@ -42,9 +42,8 @@ export default function CreatePostsScreen({ navigation }) {
     );
   }
 
-
   const sendPhoto = () => {
-    setPhoto(photo.uri)
+    setPhoto(photo.uri);
   };
 
   const takePhoto = async () => {
@@ -52,25 +51,25 @@ export default function CreatePostsScreen({ navigation }) {
     setPhoto(photo.uri);
   };
 
-
   const handlerSubmit = async () => {
     try {
       await uploadPostToServer();
       navigation.navigate("Posts");
       setPhoto(null);
-      setLocation("");
+      setLocation(null);
       setTitle("");
     } catch (error) {
       alert(error.message);
     }
   };
 
-  const  uploadPostToServer  = async () => {
+  const uploadPostToServer = async () => {
     const photo = await uploadPhotoToServer();
+
     const createPost = await firebase
-    .firestore()
-    .collection("posts")
-    .add({photo,title,location,userId,username});
+      .firestore()
+      .collection("posts")
+      .add({ photo, title, location, userId, username });
   };
 
   const uploadPhotoToServer = async () => {
@@ -86,23 +85,20 @@ export default function CreatePostsScreen({ navigation }) {
     return processedPhoto;
   };
 
-
   return (
     <View style={styles.container}>
-       <KeyboardWrapper
-        setIsShowKeyboard={setIsShowKeyboard} 
-      >
-        <View style={{overflow: 'hidden', borderRadius: 8, marginTop: 36 }}>
-        <Camera style={styles.camera} ref={setCamera} type={CameraType.back}>
-          <TouchableOpacity onPress={takePhoto} style={styles.cameraBtn}>
-            <FontAwesome
-              name="camera"
-              size={24}
-              color="#BDBDBD"
-              style={styles.uploadIcon}
-            />
-          </TouchableOpacity>
-        </Camera>
+      <KeyboardWrapper setIsShowKeyboard={setIsShowKeyboard}>
+        <View style={{ overflow: "hidden", borderRadius: 8, marginTop: 36 }}>
+          <Camera style={styles.camera} ref={setCamera} type={CameraType.back}>
+            <TouchableOpacity onPress={takePhoto} style={styles.cameraBtn}>
+              <FontAwesome
+                name="camera"
+                size={24}
+                color="#BDBDBD"
+                style={styles.uploadIcon}
+              />
+            </TouchableOpacity>
+          </Camera>
         </View>
         {photo && (
           <View style={styles.photoPreview}>
@@ -110,60 +106,57 @@ export default function CreatePostsScreen({ navigation }) {
               style={{ width: 343, height: 240 }}
               source={{ uri: photo }}
             />
-          </View> 
+          </View>
         )}
         <TouchableOpacity style={styles.uploadPhotoBtn} onPress={sendPhoto}>
-          {photo ? (<Text style={styles.uploadBtnText}>Edit photo</Text>
-          ):(
+          {photo ? (
+            <Text style={styles.uploadBtnText}>Edit photo</Text>
+          ) : (
             <Text style={styles.uploadBtnText}> Upload photo</Text>
           )}
-       
         </TouchableOpacity>
         <View style={styles.formWrap}>
-        <TextInput
-          value={title}
-          onChangeText={(value) =>
-            setTitle((prevState) => ({ ...prevState, title: value }))
-          }
-          placeholder="Title..."
-          placeholderTextColor="#BDBDBD"
-          style={styles.input}
-          returnKeyType="next"
-          blurOnSubmit={false}
-          onFocus={() => setIsShowKeyboard(true)}
-          onSubmitEditing={() => {
-            locationRef.current.focus();
-          }}
-        />
-        <TextInput
-          ref={locationRef}
-          value={location}
-          onChangeText={(value) =>
-            setLocation((prevState) => ({
-              ...prevState,
-              location: value,
-            }))
-          }
-          placeholder="Location..."
-          style={{
-            ...styles.input,
-            paddingLeft: 28,
-            marginTop: 18,
-            marginBottom: 42,
-          }}
-          placeholderTextColor="#BDBDBD"
-          onFocus={() => setIsShowKeyboard(true)}
-          onSubmitEditing={() => {
-            setIsShowKeyboard(false);
-          }}
-        />
-        <View style={styles.locationPoint}>
-          <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD"  />
+          <TextInput
+            value={title}
+            onChangeText={setTitle}
+            placeholder="Title..."
+            placeholderTextColor="#BDBDBD"
+            style={styles.input}
+            returnKeyType="next"
+            blurOnSubmit={false}
+            onFocus={() => setIsShowKeyboard(true)}
+            onSubmitEditing={() => {
+              locationRef.current.focus();
+            }}
+          />
+          <TextInput
+            ref={locationRef}
+            value={location}
+            onChangeText={setLocation}
+            placeholder="Location..."
+            style={{
+              ...styles.input,
+              paddingLeft: 28,
+              marginTop: 18,
+              marginBottom: 42,
+            }}
+            placeholderTextColor="#BDBDBD"
+            onFocus={() => setIsShowKeyboard(true)}
+            onSubmitEditing={() => {
+              setIsShowKeyboard(false);
+            }}
+          />
+          <View style={styles.locationPoint}>
+            <SimpleLineIcons name="location-pin" size={24} color="#BDBDBD" />
+          </View>
+          <TouchableOpacity
+            style={styles.createPostBtn}
+            disabled={!photo}
+            onPress={handlerSubmit}
+          >
+            <Text style={styles.createPostBtnText}>Add post</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.createPostBtn} disabled={!photo} onPress={handlerSubmit}>
-          <Text style={styles.createPostBtnText}>Add post</Text>
-        </TouchableOpacity>
-      </View>
       </KeyboardWrapper>
     </View>
   );
@@ -182,12 +175,11 @@ const styles = StyleSheet.create({
     left: 0,
     borderColor: "#fff",
     borderWidth: 1,
-    overflow: 'hidden', 
-    borderRadius: 8
+    overflow: "hidden",
+    borderRadius: 8,
   },
   formWrap: {
     paddingBottom: 111,
-  
   },
   cameraBtn: {
     marginBottom: 10,

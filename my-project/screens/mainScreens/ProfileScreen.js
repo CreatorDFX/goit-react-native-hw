@@ -44,10 +44,6 @@ const ProfileScreen = ({ navigation, comment}) => {
         setUserPosts(data.docs.map((doc) => ({ ...doc.data() })))
       );
   };
-  const signOut = () => {
-    dispatch(logoutUser());
-  };
-
   const [isLiked, setIsLiked] = useState(false);
 
   const [likes, setLikes] = useState('');
@@ -73,8 +69,8 @@ const ProfileScreen = ({ navigation, comment}) => {
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={styles.userName}> {username}</Text>
-        <LogoutBtn navigation={navigation} />
+        <Text style={styles.userName}>{username}</Text>
+        <LogoutBtn />
         <View style={styles.postsWrapper}>
           <FlatList
             data={userPosts}

@@ -11,29 +11,25 @@ import { EvilIcons } from "@expo/vector-icons";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import firebase from '../../firebase/config'
 import { useSelector } from "react-redux";
-import { selectProfileImg, selectUser } from "../../redux/auth/authSelectors";
+import { selectProfileImg, selectUser, selectUserId, selectUserName } from "../../redux/auth/authSelectors";
 
 export default function DefaultPostScreen({ navigation}) {
   const [posts, setPosts] = useState([]);
-
-  // useEffect(() => {
-  //   if (route.params) {
-  //     setPosts((prevState) => [...prevState, route.params]);
-  //   }
-  // }, [route.params]);
-
-  const profileImg = useSelector(selectProfileImg)
- 
+  const userId = useSelector(selectUserId);
+  const profileImg = useSelector(selectProfileImg);
+  const userName = useSelector(selectUserName);
+  
   const user = useSelector(selectUser)
-
+ 
+  console.log(posts)
   const getAllPost = async () => {
     await firebase
       .firestore()
       .collection("posts")
+      .where("userId", "==", userId)
       .onSnapshot((data) =>
         setPosts(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
       );
-    console.log("posts", posts);
   };
 
   useEffect(() => {
@@ -48,7 +44,7 @@ export default function DefaultPostScreen({ navigation}) {
           </View>
           <View>
         <View>
-          <Text style={styles.login}>{user.name || 'Anonymous'}</Text>
+          <Text style={styles.login}>{userName || 'Anonymous'}</Text>
         </View>
         <View>
           <Text style={styles.email}>{user.email || 'Anonymous@anon.com'}</Text>
@@ -57,13 +53,14 @@ export default function DefaultPostScreen({ navigation}) {
           </View>
       <FlatList
         data={posts}
-        renderItem={( {item} ) => (
+        keyExtractor={(item, indx) => indx.toString()}
+        renderItem={({item} ) => (
           <View style={{ marginBottom: 32 }}>
             <Image
               source={{ uri: item.photo }}
               style={{ width: 343, height: 240, borderRadius: 8, overflow: 'hidden' }}
             />
-            <Text style={styles.postsNameDescription}></Text>
+            <Text style={styles.postsNameDescription}>{item.title}</Text>
             <View style={styles.wrapper}>
               <TouchableOpacity onPress={() => navigation.navigate("Comments", { postId: item.id })}>
                 <EvilIcons name="comment" size={30} color="black"  style={{ transform: [{ scaleX: -1 }] }}/>
@@ -79,15 +76,14 @@ export default function DefaultPostScreen({ navigation}) {
                   color="#BDBDBD"
                 />
                  <Text style={styles.locationText}>
-              ggggg
+                  {item.location}
               </Text>
               </TouchableOpacity>
             </View>
           </View>
         )}
-        keyExtractor={(item, indx) => indx.toString()}
       />
-    </View>
+      </View>
   );
 }
 

@@ -6,17 +6,20 @@ const initialState = {
   name: "",
   isRefreshing: false,
   profileImg: "",
+  email: null,
 };
 
 const authSuccessReducer = (state, action) => {
   state.userId = action.payload.uid;
   state.name = action.payload.displayName;
+  state.email = action.payload;
 };
 
 const logOutSuccessReducer = (state, action) => {
   state.userId = null;
   state.name = "";
   state.isRefreshing = false;
+  state.email = null;
 };
 
 
@@ -29,6 +32,7 @@ export const authSlice = createSlice({
       userId: payload.userId,
       name: payload.name,
       profileImg: payload.profileImg,
+      
     }),
     setIsRefreshing: (state, { payload }) => ({
       ...state,

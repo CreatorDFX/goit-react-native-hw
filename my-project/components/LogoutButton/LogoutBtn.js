@@ -21,8 +21,9 @@ export default function LogoutBtn({ navigation, style, ...props }) {
       },
     ];
     Alert.alert(title, message, buttons);
+  
   }
-
+ 
   return (
     <TouchableOpacity
       onPress={logoutPromptUser}
