@@ -8,7 +8,8 @@ import {
   Dimensions,
   Pressable,
   TouchableOpacity,
-  Alert
+  Alert,
+  Image
 } from "react-native";
 import * as ImagePicker from 'expo-image-picker';
 import firebase from "../../firebase/config";
@@ -19,7 +20,7 @@ import KeyboardWrapper from "../../components/KeyboardWrapper";
 import PrimaryButton from "../../components/PrimaryButton";
 import { registerUser } from "../../redux/auth/authOperations";
 import { useDispatch } from "react-redux";
-
+import { AntDesign } from '@expo/vector-icons'; 
 
 const initialFormState = {
   name: "",
@@ -83,11 +84,15 @@ const RegistrationScreen = ({navigation}) => {
     }
   };
 
+  const deletePhoto = () => {
+    setImage(null)
+  };
+
   return (
     <BackgroundImage>
       <KeyboardWrapper
         setIsShowKeyboard={setIsShowKeyboard}
-        style={{ justifyContent: "flex-end"}}
+        style={{ justifyContent: "flex-end" }}
       >
         <View
           style={{
@@ -97,7 +102,8 @@ const RegistrationScreen = ({navigation}) => {
           }}
         >
           <Text style={styles.formTitle}>Registration</Text>
-          <View style={styles.avatarWrap}>
+          <View style={styles.avatarWrap}> 
+          {!image ? (
             <TouchableOpacity style={styles.avatar} onPress={pickImage}>
               <Ionicons
                 name="add-circle-outline"
@@ -105,7 +111,21 @@ const RegistrationScreen = ({navigation}) => {
                 color="#FF6C00"
                 style={styles.addBtn}
               />
-            </TouchableOpacity>
+              </TouchableOpacity>
+              ) : (
+                <TouchableOpacity style={{zIndex: 1}} onPress={deletePhoto}>
+                <AntDesign
+                  name="closecircleo"
+                  size={24}
+                  color="#BDBDBD"
+                  style={{...styles.addBtn, backgroundColor: 'white', borderRadius: 50}}
+                />
+                </TouchableOpacity>
+              )}
+            
+            {image && (
+              <Image style={styles.profileAvatar} source={{ uri: image }} />
+            )}
           </View>
           <View>
             <TextInput
@@ -205,6 +225,14 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 108,
     top: 84,
+  },
+  profileAvatar: {
+    position: "absolute",
+    width: 120,
+    height: 120,
+    top: 0,
+    left: 0,
+    borderRadius: 16,
   },
   formTitle: {
     textAlign: "center",

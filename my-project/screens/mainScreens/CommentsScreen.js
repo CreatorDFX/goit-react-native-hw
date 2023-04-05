@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import {
   StyleSheet,
   TextInput,
@@ -9,17 +9,47 @@ import {
   FlatList,
   KeyboardAvoidingView,
   Platform,
+  Image
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
+import firebase from '../../firebase/config';
+import { useSelector } from "react-redux";
+import { selectProfileImg, selectUserName } from "../../redux/auth/authSelectors";
 
 const CommentsScreen = ({ route }) => {
   const { postId } = route.params;
   const [comment, setComment] = useState("");
   const [allComments, setAllComments] = useState([]);
+  const { name } = useSelector((state) => state.auth);
 
-  const handlerSubmit = () => {
-    console.log(comment);
-    setComment('')
+const profileImg = useSelector(selectProfileImg)
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
+
+  console.log(comment)
+
+  useEffect(() => {
+    getAllPosts();
+  }, []);
+  const createPost = async () => {
+    firebase.firestore()
+      .collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .add({ comment, name });
+      setComment('')
+  };
+
+  const getAllPosts = async () => {
+    firebase.firestore()
+      .collection("posts")
+      .doc(postId)
+      .collection("comments")
+      .onSnapshot((data) =>
+        setAllComments(data.docs.map((doc) => ({ ...doc.data(), id: doc.id })))
+      );
   };
 
   return (
@@ -28,11 +58,14 @@ const CommentsScreen = ({ route }) => {
         <FlatList
           data={allComments}
           renderItem={({ item }) => (
-            <View style={styles.commentsWrap}>
-              <Text style={{ fontSize: 16, marginBottom: 5 }}>
-                {item.username}
-              </Text>
-              <Text style={{ fontSize: 16 }}>{item.comment}</Text>
+            <View style={styles.commentsWrap}>  
+            <View style={styles.comments}>
+            <Text style={{ fontSize: 16, }}>{item.comment}</Text>
+          </View>
+              <View style={styles.avatar}>
+            <Image source={{ uri: profileImg }} style={styles.profileImg} />  
+          </View>
+        
             </View>
           )}
           keyExtractor={(item) => item.id}
@@ -52,7 +85,7 @@ const CommentsScreen = ({ route }) => {
           />
           <TouchableOpacity
             disabled={!comment}
-            onPress={handlerSubmit}
+            onPress={createPost}
             style={styles.commentBtn}
           >
             <AntDesign name="arrowup" size={24} color="white" />
@@ -85,10 +118,19 @@ const styles = StyleSheet.create({
     paddingRight: 16,
   },
   commentsWrap: {
+  flex: 1,
+  flexDirection: 'row',
+  padding: 16,
+  },
+  avatar: {
+    marginLeft: 16,
+  },
+  comments: {
+    width: 300,
+    minHeight: 70,
     borderRadius: 6,
     backgroundColor: "#F6F6F6",
     padding: 16,
-    marginBottom: 24,
   },
   commentBtn: {
     position: "absolute",
@@ -100,6 +142,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     right: 5,
     top: 8,
+  },
+ 
+  profileImg: {
+    width: 28,
+    height: 28,
+    borderRadius: 16,
   },
 });
 

@@ -19,7 +19,7 @@ import  { selectUserId, selectUserName } from '../../redux/auth/authSelectors'
 
 export default function CreatePostsScreen({ navigation }) {
   const [photo, setPhoto] = useState(null);
-  const [name, setName] = useState("");
+  const [title, setTitle] = useState("");
   const [location, setLocation] = useState(null);
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
   const locationRef = useRef();
@@ -55,24 +55,29 @@ export default function CreatePostsScreen({ navigation }) {
 
   const handlerSubmit = async () => {
     try {
-      await preparePost();
+      await uploadPostToServer();
       navigation.navigate("Posts");
       setPhoto(null);
       setLocation("");
-      setName("");
+      setTitle("");
     } catch (error) {
       alert(error.message);
     }
   };
 
+  const  uploadPostToServer  = async () => {
+    const photo = await uploadPhotoToServer();
+    const createPost = await firebase
+    .firestore()
+    .collection("posts")
+    .add({photo,title,location,userId,username});
+  };
+
   const uploadPhotoToServer = async () => {
     const res = await fetch(photo);
     const file = await res.blob();
-
     const uniquePostId = Date.now().toString();
-
     await firebase.storage().ref(`postImage/${uniquePostId}`).put(file);
-
     const processedPhoto = await firebase
       .storage()
       .ref("postImage")
@@ -81,16 +86,6 @@ export default function CreatePostsScreen({ navigation }) {
     return processedPhoto;
   };
 
-  const preparePost = async () => {
-    const photo = await uploadPhotoToServer();
-    const createPost = await firebase.firestore().collection("Posts").add({
-      photo,
-      name,
-      location,
-      userId,
-      username,
-    });
-  };
 
   return (
     <View style={styles.container}>
@@ -126,11 +121,11 @@ export default function CreatePostsScreen({ navigation }) {
         </TouchableOpacity>
         <View style={styles.formWrap}>
         <TextInput
-          value={name}
+          value={title}
           onChangeText={(value) =>
-            setName((prevState) => ({ ...prevState, name: value }))
+            setTitle((prevState) => ({ ...prevState, title: value }))
           }
-          placeholder="Name..."
+          placeholder="Title..."
           placeholderTextColor="#BDBDBD"
           style={styles.input}
           returnKeyType="next"
