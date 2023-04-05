@@ -63,7 +63,7 @@ const ProfileScreen = ({navigation}) => {
                 />
                 <Text
                   style={{
-                    fontFamily: "Roboto-regular",
+                    fontFamily: "Roboto-Regular",
                     fontSize: 18,
                     marginBottom: 5,
                     marginTop: 5,

@@ -5,8 +5,10 @@ import { useCallback } from "react";
 import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import Main from "./components/Main";
-import { LogBox } from 'react-native';
-LogBox.ignoreLogs(['Warning: Async Storage has been extracted from react-native core']);
+import { LogBox } from "react-native";
+LogBox.ignoreLogs([
+  "Warning: Async Storage has been extracted from react-native core"]);
+
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,12 +28,11 @@ export default function App() {
     return null;
   }
 
-
-  return ( 
-  <Provider store={store}>
-    <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-    <Main/>
-    </View> 
+  return (
+    <Provider store={store}>
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <Main />
+      </View>
     </Provider>
   );
 }

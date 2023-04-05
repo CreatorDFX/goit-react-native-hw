@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "my-project-4803f",
   storageBucket: "my-project-4803f.appspot.com",
   messagingSenderId: "107088165776",
-  appId: "1:107088165776:web:c07c5d76248e5e66f31115",
+  appId: "1:107088165776:web:813696d118dbb542f31115",
 };
 
 export default firebase.initializeApp(firebaseConfig);

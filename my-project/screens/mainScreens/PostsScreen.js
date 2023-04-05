@@ -32,8 +32,8 @@ export default function DefaultPostScreen({ navigation}) {
     <View style={styles.mainContainer}>
       <FlatList
         data={posts}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => (
+        keyExtractor={(item) => item.id}
+        renderItem={( item ) => (
           <View style={{ marginBottom: 32 }}>
             <Image
               source={{ uri: item.photo }}

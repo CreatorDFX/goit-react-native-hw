@@ -2,6 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import firebase from '../../firebase/config';
 import { setIsRefreshing, updateUserProfile } from "./authSlice";
 
+
 export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async ({ name, email, password, image }) => {
