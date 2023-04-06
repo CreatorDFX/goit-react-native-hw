@@ -3,10 +3,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { NavigationContainer } from "@react-navigation/native";
 import useRoute from "../helpers/router";
 import { authStateChangeUser } from "../redux/auth/authOperations";
-import { selectIsRefreshing, selectUserName } from "../redux/auth/authSelectors";
+import { selectIsRefreshing, selectUserId, selectUserName } from "../redux/auth/authSelectors";
 
 const Main = () => {
-  const user = useSelector(selectUserName);
+  const user = useSelector(selectUserId);
   const dispatch = useDispatch();
   const isRefreshing = useSelector(selectIsRefreshing);
 

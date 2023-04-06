@@ -1,6 +1,12 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import firebase from '../../firebase/config';
-import { setIsRefreshing, updateUserProfile } from "./authSlice";
+import { auth } from "../../firebase/config";
+import {
+  createUserWithEmailAndPassword,
+  updateProfile,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+} from "firebase/auth";
 
 
 export const registerUser = createAsyncThunk(
@@ -8,20 +14,12 @@ export const registerUser = createAsyncThunk(
   async ({ name, email, password, image }) => {
     console.log("image", image);
     try {
-      await firebase.auth().createUserWithEmailAndPassword(email, password);
-
-      const user = await firebase.auth().currentUser;
-      await user.updateProfile({
-        displayName: name,
-        photoURL: image,
-        
-      });
-
-      const { displayName, uid } = await firebase.auth().currentUser;
-
-      return { displayName, uid };
-    } catch (error) {
-      console.log(error.message);
+      await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(auth.currentUser, { displayName, photoURL });
+      const { uid } = auth.currentUser;
+      return { userId: uid, displayName: name, photoURL };
+    } catch ({ message }) {
+      return rejectWithValue(message);
     }
   }
 );
@@ -30,36 +28,42 @@ export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async ({ email, password }) => {
     try {
-      const user = await firebase
-        .auth()
-        .signInWithEmailAndPassword(email, password);
+      const user = await signInWithEmailAndPassword(auth, email, password);
+      console.log("user", user)
+     
     } catch (error) {
-      console.log(error.message);
+      console.log("error", error);
+    console.log("error.code", error.code);
+    console.log("error.message", error.message);
     }
   }
 );
 
-export const logoutUser = createAsyncThunk('auth/logout', async () => {
+export const logoutUser = createAsyncThunk("auth/logout", async () => {
   try {
-    await firebase.auth().signOut();
+    await signOut(auth);
   } catch (error) {
     console.log(error.message);
   }
 });
 
-
-export const authStateChangeUser = () => async (dispatch, getState) => {
-  await dispatch(setIsRefreshing(true));
-  await firebase.auth().onAuthStateChanged((user) => {
-    if (user) {
-      const userUpdateProfile = {
-        name: user.displayName,
-        userId: user.uid,
-        profileImg: user.photoURL,
-      };
-
-      dispatch(updateUserProfile(userUpdateProfile));
+export const authStateChangeUser = createAsyncThunk(
+  "auth/authStateChangeUser",
+  async (_, { rejectWithValue }) => {
+    try {
+      return await new Promise((resolve, reject) =>
+        onAuthStateChanged(auth, (user) => {
+          if (user) {
+            const { uid, name, photoURL } = user;
+            resolve({ userId: uid, displayName: name, photoURL });
+          } else {
+            return rejectWithValue("Unable to fetch user");
+          }
+        })
+      );
+    } catch ({ message }) {
+      return rejectWithValue(message);
     }
-    dispatch(setIsRefreshing(false));
-  });
-};
+  }
+);
+

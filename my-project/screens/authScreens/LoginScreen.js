@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   TextInput,
   StyleSheet,
@@ -13,7 +13,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import BackgroundImage from "../../components/BackgroundImg";
 import KeyboardWrapper from "../../components/KeyboardWrapper";
 import PrimaryButton from "../../components/PrimaryButton";
-import { loginUser } from "../../redux/auth/authOperations";
+import { authStateChangeUser, loginUser } from "../../redux/auth/authOperations";
 
 const initialFormState = {
   email: "",
@@ -29,13 +29,12 @@ const LoginScreen = ({ navigation }) => {
 
   const dispatch = useDispatch();
 
-
   const handlerSubmit = () => {
     console.log(values)
     Keyboard.dismiss();
     dispatch(loginUser(values));
-    
   };
+
 
   const handlePasswordVisibility = () => {
     if (rightIcon === "eye") {
